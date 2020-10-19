@@ -3,6 +3,7 @@
 using namespace std;
 
 bool Find(vector<vector<int> > vv, int n){
+    if(vv.empty()) return false;
     int i = 0, j = vv[0].size()-1;
     while(i < vv.size() && j >= 0){
         if(vv[i][j] == n) return true;
@@ -24,7 +25,7 @@ int main(){
         cout << endl;
     }
     cout << "这个二维数组中是否有：" ;
-    
+
     int num;
     cin >> num;
     if(Find(vv, num)) cout << "数组中存在" << num << endl;
