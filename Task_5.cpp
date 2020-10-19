@@ -43,26 +43,26 @@ string replaceSpace(string s) {
 }
 
 void replaceSpace(char *str,int length) {
-        if(str == NULL ||length<=0) return;
-        int sz = 0, count = 0;
-        for(int i=0;str[i]!='\0';i++)
-        {
-            if(str[i] == ' ') count++;
-            sz++;
-        }
-        int new_sz = sz+count*2;
-        int i = sz;
-        int j = new_sz;
-        while(sz>=0 && j>i)
-        {
-            if(str[i] == ' ')
-            {
-                str[j--] = '0';
-                str[j--] = '2';
-                str[j--] = '%';
-            }
-            else 
-                str[j--] = str[i];
-            i--;
-        }
+    if(str == NULL ||length<=0) return;
+    int sz = 0, count = 0;
+    for(int i=0;str[i]!='\0';i++)
+    {
+        if(str[i] == ' ') count++;
+        sz++;
     }
+    int new_sz = sz+count*2;
+    int i = sz;
+    int j = new_sz;
+    while(sz>=0 && j>i)
+    {
+        if(str[i] == ' ')
+        {
+            str[j--] = '0';
+            str[j--] = '2';
+            str[j--] = '%';
+        }
+        else 
+            str[j--] = str[i];
+        i--;
+    }
+}
