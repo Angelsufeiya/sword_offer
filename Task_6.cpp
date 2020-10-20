@@ -11,8 +11,3 @@ void PrintListReversing(ListNode* Head){
     // 从尾到头打印链表
     
 }
-
-int main(){
-
-    return 0;
-}
