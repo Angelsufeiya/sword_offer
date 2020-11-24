@@ -1,7 +1,24 @@
 #include <iostream>
 #include <vector>
-
 using namespace std;
+
+bool binary_search(vector<int> v, int k, int left, int right){
+    while(left <= right){
+        int mid = left + (right-left)/2;
+        if(v[mid] > k) right = mid-1;
+        else if(v[mid] < k) left = mid+1;
+        else return true;
+    }
+    return false;
+}
+
+int main(){
+    int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    vector<int> v(arr, arr+10);
+    cout << binary_search(v, 1, 0, 9) << endl;
+    return 0;
+}
+
 #if 0
 //小顶堆结点调整
 void adjustMinHeap(vector<int>& nums,int root,int len) {
@@ -53,7 +70,7 @@ int main(){
     return 0;
 }
 #endif
-#if 1
+#if 0
 
 void quickSort(vector<int>& v, int l, int r){
     if(l > r) return;
