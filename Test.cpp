@@ -1,7 +1,35 @@
 #include <iostream>
-#include <vector>
+#include <string>
 using namespace std;
 
+// 删除公共字符串
+int main(){
+    string s1, s2;
+
+    getline(cin, s1);
+    getline(cin, s2);
+
+    int HashTable[256] = {0};
+    for(int i = 0; i < s2.size(); ++i) HashTable[s2[i]]++;
+
+    string res;
+    for(int i = 0; i < s1.size(); ++i) {
+        if(!HashTable[s1[i]]) res += s1[i];
+    }
+    cout << res << endl;
+
+    return 0;
+}
+
+#if 0
+int main(){
+    int year = 1009;
+    int *p = &year;
+    cout << *p++ << endl;
+    return 0;
+}
+#endif
+#if 0
 bool binary_search(vector<int> v, int k, int left, int right){
     while(left <= right){
         int mid = left + (right-left)/2;
@@ -18,7 +46,7 @@ int main(){
     cout << binary_search(v, 1, 0, 9) << endl;
     return 0;
 }
-
+#endif
 #if 0
 //小顶堆结点调整
 void adjustMinHeap(vector<int>& nums,int root,int len) {
