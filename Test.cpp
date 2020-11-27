@@ -4,6 +4,45 @@
 #include <algorithm>
 using namespace std;
 
+#if 0
+// 字符串中找出连续最长的数字串
+int main(){
+    string s, res; 
+    cin >> s;
+    
+    for(int i = 0; i < s.size(); i++){
+        string st;
+        while(s[i] >= '0' && s[i] <= '9') {
+            st += s[i];
+            i++;
+        }
+        if (st.size() > res.size()) {
+            res = st;
+        }
+    }
+    cout << res << endl;
+    return 0;
+}
+#endif
+#if 0
+// 求数组中出现超过一半的数字
+int MoreThanHalfNum_Solution(vector<int> numbers) {
+    sort(numbers.begin(),numbers.end());
+    int num = numbers[numbers.size()/2];
+
+    if (numbers.size() / 2 < count(numbers.begin(), numbers.end(), num)) return num;
+    return 0;
+}
+
+int main(){
+    int arr[] = {1,2,3,2,2,2,5,4,2};
+    vector<int> v(arr, arr+9);
+    cout << MoreThanHalfNum_Solution(v) << endl;
+    return 0;
+}
+#endif
+#if 0
+// 倒置字符串
 int main(){
     string s;
     getline(cin, s);
@@ -22,7 +61,7 @@ int main(){
 
     return 0;
 }
-
+#endif
 #if 0
 // 倒置字符串
 int main(){
