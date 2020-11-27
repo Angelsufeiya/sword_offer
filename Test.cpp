@@ -4,6 +4,22 @@
 #include <algorithm>
 using namespace std;
 
+bool IsCircleText(string s){
+    for(int i = 0, j = s.size()-1; i <= j; i++, j--){
+        if (s[i] != s[j]) return false;
+    }
+    return true;
+}
+
+// 统计回文
+int main(){
+    string s1, s2;
+    cin >> s1 >> s2;
+    int count = 0;
+
+    return 0;
+}
+
 #if 0
 // 字符串中找出连续最长的数字串
 int main(){
