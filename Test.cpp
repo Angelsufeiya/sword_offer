@@ -1,7 +1,70 @@
 #include <iostream>
+#include <vector>
 #include <string>
+#include <algorithm>
 using namespace std;
 
+int main(){
+    string s;
+    getline(cin, s);
+
+    reverse(s.begin(), s.end());
+    auto start = s.begin();
+    while(start != s.end()){
+        auto end = start;
+        while (*end != ' ' && end != s.end()) end++;
+        reverse(start, end);
+
+        if(end != s.end()) start = end+1;
+        else start = end;
+    }
+    cout << s << endl;
+
+    return 0;
+}
+
+#if 0
+// 倒置字符串
+int main(){
+    string s1, res;
+    cin >> res;
+    while(cin >> s1){
+        res = s1 + ' ' + res;
+    }
+    cout << res << endl;
+
+    return 0;
+}
+#endif
+#if 0
+// 排列子序列
+int main(){
+    int n;
+    cin >> n;
+
+    vector<int> v(n+1);
+    for(int i = 0; i < n; ++i) cin >> v[i];
+
+    int count;
+    for(int i = 0; i < n; i++){
+        if(v[i] < v[i+1]){
+            i++;
+            while(i < n && v[i] <= v[i+1]) i++;
+            count++;
+        }
+        else if (v[i] == v[i+1]) i++;
+        else {
+            i++;
+            while(i < n && v[i] >= v[i+1]) i++;
+            count++;
+        }
+    }
+    cout << count << endl;
+    return 0;
+}
+#endif
+
+#if 0
 // 删除公共字符串
 int main(){
     string s1, s2;
@@ -10,17 +73,17 @@ int main(){
     getline(cin, s2);
 
     int HashTable[256] = {0};
-    for(int i = 0; i < s2.size(); ++i) HashTable[s2[i]]++;
+    for(auto i : s2) HashTable[i]++;
 
     string res;
-    for(int i = 0; i < s1.size(); ++i) {
-        if(!HashTable[s1[i]]) res += s1[i];
+    for(auto i : s1) {
+        if(!HashTable[i]) res += i;
     }
     cout << res << endl;
 
     return 0;
 }
-
+#endif
 #if 0
 int main(){
     int year = 1009;
