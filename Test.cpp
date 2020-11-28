@@ -4,6 +4,26 @@
 #include <algorithm>
 using namespace std;
 
+#if 0
+// 连续最大和
+int main(){
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for(int i = 0; i < n; ++i) cin >> v[i];
+    int res = v[0], tmp = v[0];
+    for(int i = 1; i < n; ++i){
+        if(tmp >= 0) tmp += v[i];
+        else{
+            tmp = v[i];
+        }
+        if(tmp > res) res = tmp;
+    }
+    cout << res << endl;
+    return 0;
+}
+#endif
+#if 0
 bool IsCircleText(string s){
     for(int i = 0, j = s.size()-1; i <= j; i++, j--){
         if (s[i] != s[j]) return false;
@@ -17,9 +37,16 @@ int main(){
     cin >> s1 >> s2;
     int count = 0;
 
+    for(int i = 0; i <= s1.size(); ++i){
+        string s = s1;
+        s.insert(i, s2);
+        if(IsCircleText(s)) count++;
+    }
+    cout << count << endl;
+
     return 0;
 }
-
+#endfi
 #if 0
 // 字符串中找出连续最长的数字串
 int main(){
