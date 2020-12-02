@@ -1,9 +1,105 @@
 #include <iostream>
 #include <vector>
-#include <string>
-#include <algorithm>
 using namespace std;
 
+vector<int> fun(vector<int>& v1, vector<int>& v2){
+    int len1 = v1.size(), len2 = v2.size();
+    int len = len1 + len2;
+    vector<int> v;
+    
+    for(int i = 0, j = 0; i + j < len;){
+        if(v1[i] <= v2[j]){
+            v.push_back(v1[i]);
+            ++i;
+        }
+        else if(v1[i] > v2[j]){
+            v.push_back(v2[j]);
+            ++j;
+        }
+        else if(i == len1){
+            v.push_back(v2[j]);
+            ++j;
+        }
+        else if(j == len2){
+            v.push_back(v1[i]);
+            ++i;
+        }
+    }
+    return v;
+}
+
+int main(){
+    int arr1[] = {1, 3, 6, 7, 9}, arr2[] = {2, 4, 6, 8, 11};
+    vector<int> v1(arr1, arr1+5), v2(arr2, arr2+5), res;
+    res = fun(v1, v2);
+    for(int i = 0; i < res.size(); ++i){
+        if(i == 0) cout << res[i];
+        else cout << ' ' << res[i];
+    }
+    return 0;
+}
+
+#if 0
+#include <iostream>
+#include <vector>
+using namespace std;
+
+bool fun(int n){
+    while(n % 7 == 0){
+        n /= 7;
+    }
+    while(n % 3 == 0){
+        n /= 3;
+    }
+    while(n % 2 == 0){
+        n /= 2;
+    }
+    if(n == 1) return true;
+    return false;
+}
+
+int main(){
+    int n = 9;
+    while(n && n){
+        int count = 0;
+        for(int i = 1; i <2*n; ++i){
+            if(fun(i)) ++count;
+            if(count == n) {
+                cout << i << endl;
+                break;
+            }
+        }
+    }
+    return 0;
+}
+#endif
+#if 0
+char fun (char x, char y){
+    if(x < y) return x;
+    return y;
+}
+int main(){
+    int a = '1', b = '1', c = '2';
+    cout << fun (fun(a,b), fun(b,c));
+    return 0;
+}
+#endif
+
+#if 0
+// 单例模式：懒汉模式
+class Singleton
+{
+private:
+	Singleton(){}
+	static Singleton* instance;
+public:
+	static Singleton* GetSingleton()
+	{
+		return instance;
+	}
+};
+Singleton* Singleton::instance = new Singleton();
+#endif
 #if 0
 // 连续最大和
 int main(){
@@ -46,7 +142,7 @@ int main(){
 
     return 0;
 }
-#endfi
+#endif
 #if 0
 // 字符串中找出连续最长的数字串
 int main(){
