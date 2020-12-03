@@ -2,44 +2,63 @@
 #include <vector>
 using namespace std;
 
-vector<int> fun(vector<int>& v1, vector<int>& v2){
-    int len1 = v1.size(), len2 = v2.size();
-    int len = len1 + len2;
-    vector<int> v;
-    
-    for(int i = 0, j = 0; i + j < len;){
-        if(v1[i] <= v2[j]){
-            v.push_back(v1[i]);
-            ++i;
-        }
-        else if(v1[i] > v2[j]){
-            v.push_back(v2[j]);
-            ++j;
-        }
-        else if(i == len1){
-            v.push_back(v2[j]);
-            ++j;
-        }
-        else if(j == len2){
-            v.push_back(v1[i]);
-            ++i;
-        }
-    }
-    return v;
-}
-
+#if 0
+#include <iostream>
+#include <vector>
+using namespace std;
+// Fib 数列
 int main(){
-    int arr1[] = {1, 3, 6, 7, 9}, arr2[] = {2, 4, 6, 8, 11};
-    vector<int> v1(arr1, arr1+5), v2(arr2, arr2+5), res;
-    res = fun(v1, v2);
-    for(int i = 0; i < res.size(); ++i){
-        if(i == 0) cout << res[i];
-        else cout << ' ' << res[i];
+    int N;
+    cin >> N;
+    if(N == 0 || N == 1) cout << 0 << endl;
+    else{
+        vector<int> v{0,1};
+        int i = 1;
+        do{
+            v.push_back(v[i-1]+v[i]);
+            i++;
+        }while(v[i] < N);
+        cout << min(v[i]-N, N-v[i-1]) << endl;
     }
     return 0;
 }
+#endif
 
 #if 0
+// 最小公倍数
+#include<iostream>
+using namespace std;
+
+int gcd(int a, int b){
+    while(a != b){
+        if(a > b) a = a - b;
+        else b = b - a;
+    }
+    return b;
+}
+
+int gcd(int a, int b)
+{
+	int res;
+	while (res = a % b) {
+		a = b;
+		b = res;
+	}
+	return b;
+}
+
+int main()
+{
+	int a, b;
+	while (cin >> a >> b) {
+		cout << a * b / gcd(a, b) << endl;
+	}
+	return 0;
+}
+#endif
+
+#if 0
+// 特殊的数，只能是1，2，3，7乘积的倍数
 #include <iostream>
 #include <vector>
 using namespace std;
