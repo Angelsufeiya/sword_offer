@@ -2,6 +2,15 @@
 #include <vector>
 using namespace std;
 
+int main(){
+    vector<int> v;
+    for(int i = 0; i < 10; ++i) v.push_back(i);
+    v.resize(6);
+    for(auto i : v) cout << i << ' ';
+    cout << v.capacity() << endl;
+    return 0;
+}
+
 #if 0
 #include <iostream>
 #include <vector>
