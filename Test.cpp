@@ -1,7 +1,212 @@
 #include <iostream>
+using namespace std;
+
+#if 0
+// 查找组成一个偶数最接近的两个素数
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+bool isPrime(int n){
+    for(int i = 2; i <= sqrt(n); ++i){
+        if(n % i == 0) return false;
+    }
+    return true;
+}
+
+int main(){
+    int n;
+    while(cin >> n){
+        int half = n/2;
+        while(half > 0){
+            if(isPrime(half) && isPrime(n-half)) break;
+            --half;
+        }
+        cout << half << endl << n-half << endl;
+    }
+    return 0;
+}
+#endif
+
+#if 0
+// 二进制插入
+class BinInsert {
+public:
+    int binInsert(int n, int m, int j, int i) {
+        m <<= j;
+        return n ^ m;
+    }
+};
+#endif
+#if 0
+// 最大连续bit数
+#include <iostream>
+using namespace std;
+
+int main(){
+    int n;
+    while(cin >> n){
+        int count, res = 0;
+        while(n){
+            count = 0;
+            while(n & 1){
+                ++count;
+                n = n >> 1;
+            }
+            if(count > res) res = count;
+            n = n >> 1;
+        }
+        cout << res << endl;
+    }
+    return 0;
+}
+#endif
+
+#if 0
+// 最小公共祖先
+class LCA {
+public:
+    int getLCA(int a, int b) {
+        while(a != b){
+            while(a > b){
+                a /= 2;
+            }
+            while(a < b){
+                b /= 2;
+            }
+        }
+        return a;
+    }
+};
+#endif
+#if 0
+int main(){
+    int **a[3][4], (**b)[3][4],  *(*c)[3][4], *(*d[3])[4];
+    cout << sizeof(a) << ' ' << sizeof(b) << ' '  << sizeof(c) << ' '  << sizeof(d) << endl;
+}
+#endif
+
+#if 0
+// 走方格
+#include <iostream>
 #include <vector>
 using namespace std;
 
+int main(){
+    int n, m;
+    while(cin >> n >> m){
+        vector<vector<int>> vv(n+1, vector<int>(m+1,1));
+        for(int i = 1; i <= n; ++i){
+            for(int j = 1; j <= m; ++j){
+                vv[i][j] = vv[i-1][j]+vv[i][j-1];
+            }
+        }
+        cout << vv[n][m] << endl;
+    }
+    return 0;
+}
+#endif
+
+
+#if 0
+// 合并两个有序数组
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        vector<int> tmp;
+        int i = 0, j = 0;
+        while(i < m && j < n){
+            if(nums1[i] <= nums2[j]){
+                tmp.push_back(nums1[i]);
+                ++i;
+            }
+            else{
+                tmp.push_back(nums2[j]);
+                ++j;
+            }
+        }
+        while(i == m && j < n){
+            tmp.push_back(nums2[j]);
+            ++j;
+        }
+        while(i < m && j == n){
+            tmp.push_back(nums1[i]);
+            ++i;
+        }
+        nums1 = tmp;
+    }
+};
+
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int i = m+n;
+        nums1.resize(i);
+        --m,--n;
+        while(n >= 0){
+            while(m >= 0 && nums1[m] > nums2[n]) swap(nums1[m--], nums1[--i]);
+            swap(nums2[n--], nums1[--i]);
+        } 
+    }
+};
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        nums1.resize(m+n);
+        for(int i = 0; i < n; i++) nums1[m+i]=nums2[i];
+        sort(nums1.begin(), nums1.end());
+    }
+};
+#endif
+
+#if 0
+// 矩阵中的路径(回溯算法)
+class Solution {
+    vector<vector<bool>> flag;
+    int direct[4][2] = {{-1,0}, {1,0}, {0,1}, {0,-1}};    // 左、右、上、下
+public:
+    // dfs(初始矩阵，索引行坐标i，索引纵坐标j，待判断的字符串，字符串索引初始为0即先判断字符串的第一位)
+    bool dfs(char * matrix, int i, int j, char * str, int pathLength){
+        // 矩阵行数，矩阵列数
+        int m = flag.size(), n = flag[0].size();
+        // 递归终止条件
+        if(str[pathLength] != matrix[i*n+j]) return false;
+        // 若已经到达str末尾了，说明之前的都已经匹配成功了，直接返回true即可
+        if(str[pathLength+1] == '\0') return true;
+        // 要走的第一个位置置为true，表示已经走过了
+        flag[i][j] = true;
+        
+        // 回溯，递归寻找，每次找到了就给k加一，找不到，还原
+        for(int k = 0; k < 4; ++k){
+            int row = direct[k][0] + i;
+            int col = direct[k][1] + j;
+            if(row >= m || col >= n|| row < 0 || col < 0|| flag[row][col]) continue;
+            if(dfs(matrix, row, col, str, pathLength+1)) return true;
+        }
+        // 走到这，说明这一条路不通，还原，再试其他的路径
+        flag[i][j] = false;
+        return false;
+    }
+    
+    bool hasPath(char* matrix, int rows, int cols, char* str){
+        // matrix是一维数组存放二维的值
+        if(matrix == NULL || rows < 1 || cols < 1 || str == NULL) return false;
+        // 标志位，初始化为false
+        flag = vector<vector<bool>>(rows, vector<bool>(cols, false));
+        for(int i = 0; i < rows; ++i){
+            for(int j = 0; j < cols; ++j){
+                // 循环遍历二维数组，找到起点等于str第一个元素的值
+                // 再递归判断四周是否有符合条件的----回溯法
+                if(matrix[i*cols+j] == str[0]){
+                    if(dfs(matrix, i, j, str, 0)) return true;
+                }
+            }
+        }
+        return false;
+    }
+};
+#endif
+#if 0
 int main(){
     vector<int> v;
     for(int i = 0; i < 10; ++i) v.push_back(i);
@@ -10,7 +215,7 @@ int main(){
     cout << v.capacity() << endl;
     return 0;
 }
-
+#endif
 #if 0
 #include <iostream>
 #include <vector>
