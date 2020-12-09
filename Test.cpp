@@ -1,6 +1,192 @@
 #include <iostream>
+#include <vector>
+#include <string>
 using namespace std;
 
+struct ListNode{
+    int m_value;
+    ListNode* m_pnext;
+};
+
+int main(){
+    
+    return 0;
+}
+
+
+
+#if 0
+class ObjA{
+public:
+    virtual void test1(){cout << "1";}
+    void test2(){cout << "2";}
+    void test3(){cout << "3";}
+};
+
+class ObjB : public ObjA{
+public:
+    void test1(){cout << "4";}
+    virtual void test2(){cout << "5";}
+    void test3(){cout << "6";}
+};
+
+int main(){
+    ObjA * p = new ObjA;
+    p->test1();
+    p->test2();
+    p->test3();
+    delete p;
+    p = new ObjB;
+    p->test1();
+    p->test2();
+    p->test3();
+    delete p;
+    return 0;
+}
+#endif
+#if 0
+// 打印从1到最大的n位数
+void CoutNum(vector<char>& v){
+    bool flag = true;
+    int len = v.size();
+    for(int i = 0; i < len; ++i){
+        if(flag && v[i] != '0') flag = false;
+        if(!flag) cout << v[i];
+    }
+    cout << ' ';
+}
+
+void CoutDigitNum(vector<char> v, int len, int index){
+    if(index == len-1){
+        CoutNum(v);
+        return;
+    }
+    for(int i = 0; i < 10; ++i){
+        v[index+1] = i+'0';
+        CoutDigitNum(v, len, index+1);
+    }
+}
+
+int main(){
+    int num;
+    while(cin >> num){ 
+        if(num <= 0){
+            cout << "输入有问题，请重新输入" << endl;
+            continue;
+        }
+        vector<char> v(num, '0');
+        for(int i = 0; i < 10; ++i){
+            v[0] = i+'0';
+            CoutDigitNum(v, num, 0);
+        }
+    }
+    return 0;
+}
+#endif
+#if 0
+// 方法一：基础思路
+class Solution {
+public:
+    vector<int> printNumbers(int n) {
+        int max = pow(10, n)-1;
+        vector<int> v(max);
+        for(int i = 0; i < max; i++) v[i] = i+1;
+        return v;
+    }
+};
+
+// 方法二：解决大数问题
+bool increment(vector<char>& v){
+    bool flag = false;
+    int n = 0;
+    int len = v.size();
+    for(int i = len-1; i >= 0; --i){
+        int sum = v[i]-'0'+n;
+        if(i == len-1) sum++;
+        if(sum >= 10){
+            if(i == 0) flag = true;
+            else{
+                sum -= 10;
+                n = 1;
+                v[i] = '0'+sum;
+            }
+        }
+        else{
+            v[i] = '0'+sum;
+            break;
+        }
+    }
+    return flag;
+}
+
+void CoutNum(vector<char>& v){
+    bool flag = true;
+    int len = v.size();
+    for(int i = 0; i < len; ++i){
+        if(flag && v[i] != '0') flag = false;
+        if(!flag) cout << v[i];
+    }
+    cout << ' ';
+}
+
+int main(){
+    int num;
+    while(cin >> num){ 
+        if(num <= 0){
+            cout << "输入有问题，请重新输入" << endl;
+            continue;
+        }
+        vector<char> v(num, '0');
+        while(!increment(v)){
+            CoutNum(v);
+        }
+    }
+    return 0;
+}
+#endif
+
+
+#if 0
+// 机器人的运动范围
+class Solution {
+    vector<vector<bool> > flag;
+    int direct[4][2] = {{-1,0}, {1,0}, {0,1}, {0,-1}};    // 左、右、上、下
+public:
+    int getDigitSum(int num){
+        int tmp = 0;
+        while(num){
+            tmp += num %10;
+            num /= 10;
+        }
+        return tmp;
+    }
+    
+    bool check(int threshold, int rows, int cols, int row, int col){
+        if(row >= 0 && col >= 0 && row < rows && col < cols && getDigitSum(row)+getDigitSum(col) <= threshold && !flag[row][col]) return true;
+        return false;
+    }
+    int movingCountCore(int threshold, int rows, int cols, int row, int col){
+        int count = 0;
+        if(check(threshold, rows, cols, row, col)){
+            flag[row][col] = true;
+            count = 1 + movingCountCore(threshold, rows, cols, row+1, col)
+                      + movingCountCore(threshold, rows, cols, row, col+1)
+                      + movingCountCore(threshold, rows, cols, row-1, col)
+                      + movingCountCore(threshold, rows, cols, row, col-1);
+        }
+        return count;
+    }
+    
+    int movingCount(int threshold, int rows, int cols)
+    {
+        if(threshold < 0 || rows < 0 || cols < 0) return 0;
+        
+        flag = vector<vector<bool>>(rows, vector<bool>(cols, false));
+        int count = movingCountCore(threshold, rows, cols, 0, 0);
+        return count;
+    }
+};
+#endif
 #if 0
 // 查找组成一个偶数最接近的两个素数
 #include <iostream>
