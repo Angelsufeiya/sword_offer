@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 
+#if 0
 // 基类 衣服
 class Clothe
 {
@@ -85,7 +86,7 @@ int main()
 
     return 0;
 }
-
+#endif
 #if 0
 // 工厂方法模式
 class Shoes
