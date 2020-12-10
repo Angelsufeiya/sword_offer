@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int main(){
+    printf("%s,%5.3s\n", "computer", "computer");
+    return 0;
+}
+#if 0
 typedef struct ListNode{
     int m_value;
     struct ListNode * m_next;
@@ -62,3 +67,4 @@ int main(){
     Free(Head);
     return 0;
 }
+#endif
