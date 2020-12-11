@@ -2,9 +2,19 @@
 #include <stdlib.h>
 
 int main(){
+    int a[5][5];
+    int (*p)[4];
+    p = a;
+    printf("%p, %d", &p[4][2] - &a[4][2],  &p[4][2] - &a[4][2]);
+    return 0;
+}
+
+#if 0
+int main(){
     printf("%s,%5.3s\n", "computer", "computer");
     return 0;
 }
+#endif
 #if 0
 typedef struct ListNode{
     int m_value;
