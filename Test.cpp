@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <stdio.h>
 using namespace std;
 
 struct ListNode{
@@ -10,20 +11,37 @@ struct ListNode{
 
 int main(){
     
-    return 0;
 }
 
+#if 0
+// 参数解析
 #include <iostream>
 #include <string>
 using namespace std;
 
 int main(){
     string s;
-    getline(cin, s);
+    while(getline(cin, s)){
+        int flag = 1, count = 1;
+        for(int i = 0; i < s.size(); ++i){
+            if(s[i] == ' ') ++count;
+            else if(s[i] == '"'){
+                do{
+                    ++i;
+                }while(s[i] != '"');
+            }
+        }
+        cout << count << endl;
+        for(int i = 0; i < s.size(); ++i){
+            if(s[i] != ' ' && s[i] != '"') cout << s[i];
+            else if(s[i] == '"') flag ^= 1;
+            else if(!flag && s[i] == ' ') cout << s[i];
+            else if(flag && s[i] == ' ') cout << endl;
+        }
+    }
     return 0;
 }
-
-
+#endif
 #if 0
 class ObjA{
 public:
