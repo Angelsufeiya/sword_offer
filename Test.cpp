@@ -9,9 +9,14 @@ struct ListNode{
     ListNode* m_pnext;
 };
 
+
+#if 0
 int main(){
-    
+    int a[] = {1, 2, 3, 4, 5};
+    cout << sizeof int << sizeof a << sizeof(int) << sizeof(a) << endl;
+    return 0;
 }
+#endif
 
 #if 0
 // 参数解析
