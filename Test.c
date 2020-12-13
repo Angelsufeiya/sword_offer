@@ -1,6 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+int main() {
+       int aa[2][5] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+       int *ptr1 = (int *)(&aa + 1);
+       int *ptr2 = (int *)(*(aa + 1));
+       printf( "%d,%d", *(ptr1 - 1), *(ptr2 - 1));
+       return 0;
+}
+ 
+
+#if 0
+int main() {
+    int arr[10] = {0};
+    printf("arr = %p\n", arr);
+    printf("&arr= %p\n", &arr);
+    printf("arr+1 = %p\n", arr+1);
+    printf("&arr+1= %p\n", &arr+1);
+    return 0;
+}
+#endif
+#if 0
+int main(){
+    float values[5];
+    float *vp;
+    //指针+-整数;指针的关系运算
+    
+    for (vp = &values[0]; vp < &values[5];) {
+        *vp++ = 0;     
+    }
+    return 0;
+}
+#endif
+
+#if 0
+int main() {
+    int arr[10] = {1,2,3,4,5};
+    int* p = arr; 
+    while(p<=&arr[9])//指针比较大小 
+    {
+        printf("%d ", *p);
+        p++;    
+    }
+    return 0; 
+}
+#endif
+#if 0
 int main(){
     int a[5][5];
     int (*p)[4];
@@ -8,7 +54,7 @@ int main(){
     printf("%p, %d", &p[4][2] - &a[4][2],  &p[4][2] - &a[4][2]);
     return 0;
 }
-
+#endif
 #if 0
 int main(){
     printf("%s,%5.3s\n", "computer", "computer");
