@@ -9,11 +9,93 @@ struct ListNode{
     ListNode* m_pnext;
 };
 
-int main(){
 
+#if 0
+struct A
+{ 
+	char a; 
+	short d;
+    int c;
+    double b; 
+};
+
+struct S1 {
+    double d;
+    char c;
+    int i;
+};
+
+struct S2
+{
+    char c1;
+    struct S1 s1;
+    double d;
+};
+
+struct S3 {
+    char c;
+    int i;
+    double d;
+};
+
+struct S4
+{
+    char c1;
+    struct S3 s3;
+    double d;
+};
+
+struct S5
+{
+    char c1;
+    char c2;
+    int i;
+    double d1;
+    double d2;
+};
+
+int main(){
+    cout << sizeof(A) << endl;
+    cout << offsetof(A, d) << endl;
+    cout << sizeof(S1) << endl;
+    cout << sizeof(S2) << endl;
+    cout << sizeof(S3) << endl;
+    cout << sizeof(S4) << endl;
+    cout << sizeof(S5) << endl;
     return 0;
 }
+#endif
 
+#if 0
+int fact(int n, int r) { // <= 这里把 n, r 作为迭代变量提出来
+    if (n <= 0) {
+        return 1 * r; // <= 递归终止
+    }
+    else {
+        return fact(n - 1, r * n); // <= 用迭代函数替代 fact。
+    }
+}
+
+int fact_1(int _n, int _r) { // <= _n, _r 用作初始化变量
+    int n = _n;
+    int r = _r; // <= 将原来的 n, r 变量提出来编程迭代变量
+    while (true) { // <= 生成一个迭代循环
+        if (n <= 0) {
+            return r;
+        }
+        else {
+            // 更新迭代变量
+            r = r * n;
+            n = n - 1;
+        }
+    }
+}
+
+int main(){
+    cout << fact(6, 1) << endl;
+    return 0;
+}
+#endif
 #if 0
 int main(){
     int a[] = {1, 2, 3, 4, 5};
