@@ -10,6 +10,33 @@ struct ListNode{
 };
 
 
+int main(){
+    int a = 10, b = 10;
+    a = a ^ b;
+    b = a ^ b;
+    a = a ^ b;
+    cout << a << ' ' << b << endl;
+    return 0;
+}
+
+#if 0
+int main(){
+    int a = 10;
+    a <<= 2;
+    cout << a << endl;
+    return 0;
+}
+#endif
+#if 0
+int main(){
+    const char *p  = "hello, world!";
+    while(*p){
+        cout << *p++ << ' ';
+    }
+    return 0;
+}
+#endif
+
 #if 0
 struct A
 { 
