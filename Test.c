@@ -3,6 +3,41 @@
 #include <stdlib.h>
 
 
+
+#if 0
+int main() {
+    int i = 0;
+    int j = 0;
+    int k = 1;
+    /*
+考点:
+1. 参数是从右往左传递的
+2. 前置++编译器的处理方式为:先计算++的值，然后存回到变量，最后从变量中取出值传递给函数
+3. 后置++编译器的处理方式为:先将变量的值保存到临时变量，然后计算++的值存回到变量
+4. 优先级:后置++ > 符号 > 前置++
+    */
+    printf("%d, %d, %d\n", ++i, ++i, ++i);
+    printf("%d, %d, %d\n", j++, j++, j++);
+    printf("%d, %d, %d\n", k++, -++k, -k++);
+    return 0; 
+}
+//程序输出的结果是什么?
+#endif
+#if 0
+enum Color{//颜色 {
+    RED=1,
+    GREEN=2,
+    BLUE=4
+};
+int main(){
+    enum Color clr;
+    clr = GREEN;//只能拿枚举常量给枚举变量赋值，才不会出现类型的差异。 
+    printf("%d\n", clr);
+    clr = (BLUE);
+    printf("%d\n", clr);
+    return 0;
+}
+#endif
 #if 0
 int main(){
     int arr[5] = {1, 2, 3, 4, 5};
