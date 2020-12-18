@@ -1,9 +1,82 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 
+char * my_strcpy_1(char * dst, const char * src){
+    assert(src);
+    assert(dst);    // 这个是判断dst是不是空，如果是空则没有存储src的空间。
 
+    char * ret = dst;
+    while ((*dst++ = *src++));
+    //while(*src != '\0'){
+    //    *dst++ = *src++;
+    //}
 
+    return ret;
+}
+
+char * my_strcpy(char * dst, const char * src){
+    if(*dst == NULL || *src == NULL) return NULL;
+    char * ret = dst;
+    int len = strlen(src);
+    int i = len;
+    
+    if(dst > src && dst < src+len){ // 发生内存重叠
+
+    }
+}
+
+int main(){
+	const char  str1[20] = "0123456789876543210";
+	char str2[10] = "abcdefg";
+
+	printf("调用 my_strcpy前，str2 = %s\n", str2);
+	my_strcpy(str2, str1);
+	printf("调用 my_strcpy后，str2 = %s\n", str2);
+	return 0;
+}
+
+#if 0
+// 模拟实现strlen
+size_t my_strlen(const char * str){
+    assert(str);
+    int count = 0;
+    while(*str++) 
+        ++count;
+    return count;
+}
+
+size_t my_strlen_1(const char * str){
+    if(*str == '\0') return 0;
+    else return 1+my_strlen_1(++str);
+}
+
+size_t my_strlen_2(const char * str){
+    const char * p = str;
+    while(*p){
+        p++;
+    }
+    return p - str;
+}
+
+int main(){
+    char *arr = NULL;
+	size_t ret = my_strlen(arr);
+	printf("%zu\n", ret);   // %zu用来输出size_t类型
+    return 0;
+}
+#endif
+#if 0
+int main () {
+    char str[] ="This is a simple string";
+    char * pch;
+    pch = strstr (str,"simple");
+    strncpy (pch,"sample",6);
+    puts (str);
+    return 0; 
+}
+#endif
 #if 0
 int main() {
     int i = 0;
