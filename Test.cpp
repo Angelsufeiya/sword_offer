@@ -10,6 +10,34 @@ struct ListNode{
 };
 
 
+void TestFunc(){}
+void TestFunc(int a = 10){}
+
+int main(){
+    TestFunc(100);
+    TestFunc();
+    return 0;
+}
+
+#if 0
+int singleNumber(vector<int>& nums) {
+    int sum = 0, tmp = 0;
+	for (auto i : nums){
+		sum = (sum ^ i) & ~tmp;
+		tmp = (tmp ^ i) & ~sum;
+	}
+    return sum;
+}
+
+int main(){
+    int arr[] = {2, 2, 2, 3};
+    vector<int> v(arr, arr+4);
+    cout << singleNumber(v) << endl;
+    return 0;
+}
+
+#endif
+#if 0
 int main(){
     int a = 10, b = 10;
     a = a ^ b;
@@ -18,7 +46,7 @@ int main(){
     cout << a << ' ' << b << endl;
     return 0;
 }
-
+#endif
 #if 0
 int main(){
     int a = 10;

@@ -3,6 +3,37 @@
 #include <stdlib.h>
 #include <assert.h>
 
+
+char * my_strstr(const char * str1, const char * str2){
+    assert(str1 && str2);
+
+    char * cp = (char *)str1;
+    char * s1;
+    char * s2;
+
+    if(*str2 == '\0') return NULL;
+    while(*cp){
+        s1 = cp;
+        s2 = (char *)str2;
+        while(*s1 && *s2 && *s1 == *s2){
+            s1++;
+            s2++;
+        }
+        if(*s2 == '\0') return cp;
+        cp++;
+    }
+    return NULL;
+}
+
+int main(){
+	char arr1[] = "abcbcdef";
+	char arr2[20] = "";
+
+	printf("%s\n", my_strstr(arr1, arr2));
+	return 0;
+}
+
+#if 0
 char * my_strcpy_1(char * dst, const char * src){
     assert(src);
     assert(dst);    // 这个是判断dst是不是空，如果是空则没有存储src的空间。
@@ -12,31 +43,67 @@ char * my_strcpy_1(char * dst, const char * src){
     //while(*src != '\0'){
     //    *dst++ = *src++;
     //}
-
     return ret;
 }
 
 char * my_strcpy(char * dst, const char * src){
-    if(*dst == NULL || *src == NULL) return NULL;
+    //if(*dst == NULL || *src == NULL) return NULL;
+    assert(src && dst);
+
     char * ret = dst;
     int len = strlen(src);
     int i = len;
     
-    if(dst > src && dst < src+len){ // 发生内存重叠
-
+    //源地址和目的地址重叠，高字节向低字节拷贝
+    if(dst > src && dst < src+len){
+        dst = dst+len-1;
+        src = src+len-1;
+        while(len--){
+            *dst = *src;
+            dst--;
+            src--;
+        }
     }
+    else{
+        while(len--){
+            *dst = *src;
+            dst++;
+            src++;
+        }
+    }
+    return ret;
+}
+
+char* my_strncpy(char *dest, const char *src, size_t size){
+	// 检查dest,src是否为空指针
+	assert(dest && src);
+
+	char *ret = dest;	// 记录dest指针的首地址（用于返回）
+	
+	// size的数据类型为size_t（unsigned int)
+	// size-- 不能直接写在while中，会影响 if 的判断
+	while (size && (*dest++ = *src++) != '\0'){
+		size--;
+	}
+	if (size){
+		//dest多被赋值一次'\0'，所以 -- 在 size前面
+		while (--size){
+			*dest++ = '\0';
+		}
+	}
+	return ret;
 }
 
 int main(){
-	const char  str1[20] = "0123456789876543210";
-	char str2[10] = "abcdefg";
+	const char str1[20] = "0123456789876543210";
+	char str2[20] = "abcdefg";
 
 	printf("调用 my_strcpy前，str2 = %s\n", str2);
-	my_strcpy(str2, str1);
+	my_strncpy(str2+2, str2, 10);
 	printf("调用 my_strcpy后，str2 = %s\n", str2);
 	return 0;
 }
-
+#endif
 #if 0
 // 模拟实现strlen
 size_t my_strlen(const char * str){
