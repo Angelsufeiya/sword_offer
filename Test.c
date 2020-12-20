@@ -4,6 +4,85 @@
 #include <assert.h>
 
 
+#if 0
+char* my_strcat(char *dst, const char *src){
+	assert(dst && src);
+
+	char *ret = dst;
+	//将指向dst的指针移到字符串末尾,指向'\0'
+	while (*dst++);
+	dst--;
+	//如果剩余要复制的元素个数为0或者到达了src字符串的末尾,则复制终止
+	while ((*dst++ = *src++));
+	return ret;
+}
+
+char* my_strncat(char *dst, const char *src, size_t num){
+	assert(dst && src);
+
+	char *ret = dst;
+	
+	//将指向dst的指针移到字符串末尾,指向'\0'
+	while (*dst++);
+	dst--;
+	//如果剩余要复制的元素个数为0或者到达了src字符串的末尾,则复制终止
+	while (num-- && (*dst++ = *src++));
+	if(num == 0) *dst = 0;//复制完毕后,将最后一个元素置为'\0'
+	return ret;
+}
+
+int main(){
+	const char str1[10] = "0123456789";
+	char str2[50] = "abcdefghijklmnopqrs";
+	size_t count = 12;
+
+	printf("调用 my_strncat前，str2 = %s\n", str2);
+	my_strcat(str2, str1);
+	printf("调用 my_strncat后，str2 = %s\n", str2);
+
+	return 0;
+}
+#endif
+#if 0
+int my_strncmp(const char *str1, const char *str2, size_t num){
+    assert(str1 && str2);
+    
+    int ret = 0;
+    if(num == 0) return ret;
+
+    while (!(ret = *(unsigned char *)str1 - *(unsigned char *)str2) && *str1 && *str2 && --num){
+        str1++, str2++;
+    }
+    if (ret > 0) ret = 1;
+    else if(ret < 0) ret = -1;
+
+    return ret;
+}
+
+int my_strcmp (const char * str1, const char * str2 ){
+    assert(str1 && str2);
+
+    int ret = 0;
+    while(!(ret = *(unsigned char *)str1 - *(unsigned char *)str2 && *str1 && *str2)){
+        ++str1, ++str2;
+    }
+    if (ret > 0) ret = 1;
+    else if(ret < 0) ret = -1;
+
+    return ret;
+}
+
+int main(){
+	const char str1[10] = "abcdabcd";
+	const char str2[20] = "bbcdbdbcdabcdb";
+	size_t count = 5;
+
+	printf("调用 my_strncmp后，比较得 = %d\n", my_strncmp(str1, str2, 1));
+	return 0;
+}
+#endif
+
+#if 0
 char * my_strstr(const char * str1, const char * str2){
     assert(str1 && str2);
 
@@ -27,12 +106,12 @@ char * my_strstr(const char * str1, const char * str2){
 
 int main(){
 	char arr1[] = "abcbcdef";
-	char arr2[20] = "";
+	char arr2[10] = "";
 
 	printf("%s\n", my_strstr(arr1, arr2));
 	return 0;
 }
-
+#endif
 #if 0
 char * my_strcpy_1(char * dst, const char * src){
     assert(src);
