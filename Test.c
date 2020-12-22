@@ -3,6 +3,52 @@
 #include <stdlib.h>
 #include <assert.h>
 
+int BF(char S[],char T[])
+{
+	int i=0,j=0;
+	while(S[i] != '\0' && T[j] != '\0')
+	{
+		if(S[i] == T[j])
+		{
+			i++;
+			j++;
+		}
+		else
+		{
+			i=i-j+1;
+			j=0;
+		}
+	}
+	if (T[j]=='\0') return (i-j);     //主串中存在该模式返回下标号 
+	else return -1;     //主串中不存在该模式 
+}
+
+void Getnext(int next[],char * t)
+{
+    int j = 0, k = -1;
+    next[0] = -1;
+    while(t[j] != '\0')
+    {
+        if(k == -1 || t[j] == t[k])
+        {
+            j++;
+            k++;
+            next[j] = k;
+        }
+        else k = next[k];
+    }
+}
+
+int main(){
+    char a[] = "abcdefg";
+    char b[] = "ce";
+    int next[10] = {0};
+    char t[] = "abaabca";
+    Getnext(next, t);
+    for(int i = 0; i < 6; i++) printf("%d ", next[i]);
+    printf("%d", BF(a, b));
+    return 0;
+}
 
 #if 0
 char* my_strcat(char *dst, const char *src){
