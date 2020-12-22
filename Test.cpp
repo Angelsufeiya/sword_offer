@@ -9,7 +9,70 @@ struct ListNode{
     ListNode* m_pnext;
 };
 
+#ifdef __cplusplus  // 检测工程是否为C++工程
 
+extern "C" 
+{
+
+#endif
+	int Add(int left, int right);
+
+	int main() {
+		Add(1, 2);
+		return 0;
+	}
+
+#ifdef __cplusplus 
+}
+#endif
+
+#if 0
+// KMP 算法
+int KMP(int * next, string s1, string s2){
+    int i = 0, j = 0;
+    while(s1[i] != '\0' && s2[j]!='\0'){
+        if(j == -1 || s1[i] == s2[j]){
+            ++i;    // 继续对下一个字符比较 
+            ++j;    // 模式串向右滑动
+        }
+        else{
+            j = next[j];    // 极其反人类的语句
+        }
+    }
+    if(s2[j] == '\0') return i-j;   // 匹配成功返回下标 
+    else return -1;                	// 匹配失败返回-1 
+}
+
+void Getnext(int next[],string t){
+    int j = 0, k = -1;
+    next[0] = -1;
+    while(j < t.length()-1) // 公共前后缀最长长度全部右移一位,最后一位不需要计算
+    {
+        if(k == -1 || t[j] == t[k]){
+            j++, k++;
+            next[j] = k;
+        }
+        else k = next[k];
+    }
+}
+
+
+
+int main(){
+    string s1 = "ababcabcacbab";
+    string s2 = "cabca";
+    int len = s2.size();
+    int next[len];
+    Getnext(next, s2);
+    for(int i = 0; i < len; i++) cout << next[i] << ' ';
+    cout << endl;
+    cout << KMP(next, s1, s2) << endl;
+    return 0;
+}
+#endif
+
+#if 0
+// test
 void TestFunc(){}
 void TestFunc(int a = 10){}
 
@@ -18,6 +81,7 @@ int main(){
     TestFunc();
     return 0;
 }
+#endif
 
 #if 0
 int singleNumber(vector<int>& nums) {
