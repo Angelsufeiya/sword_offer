@@ -2,9 +2,55 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <stdarg.h>	
+#include <stdarg.h>
 
-#if 1
+
+
+
+#if 0
+int Sum(int first,int second, ...)
+{
+    int sum = 0, t = first;
+    va_list vl;
+    va_start(vl, second);
+    while (t != -1){    // -1是参数结束标志
+        sum += t;
+        t = va_arg(vl, int);    // 将当前参数转换为int类型
+    }
+    va_end(vl);
+    return sum;
+}
+
+int main(int argc,char* argv[])
+{
+    printf("The sum is %d\n", Sum(30, 20, 10, -1)); // 40
+    return 0;
+}
+#endif
+
+#if 0
+void variable(int i, ...)
+{
+    int j = 0;
+    va_list arg_ptr;		// 第1步,定义这个指向参数列表的变量 
+    va_start(arg_ptr, i);	// 第2步,把上面这个变量初始化.即让它指向参数列表
+    while(j != -1 )
+    {
+        // 第3步,获取arg_ptr指向的当前参数.这个参数的类型由va_arg的第2个参数指定
+        j = va_arg(arg_ptr, int);
+        putchar(j+'0');
+    }
+    va_end(arg_ptr);	// 第4步,做一些清理工作
+}
+
+int main()
+{
+    variable(3, 3, 4, 5, 6, -1);
+    return 0;
+}
+#endif
+
+#if 0
 // int
 void PrintD(int Data){
     if(Data/10 != 0)
@@ -97,10 +143,11 @@ int My_Printf(char* ForMat,...){
 
 
 int main(){
-    My_Printf("%d, %c, %s, %f", 1,'d',"hello word",0.12);
+    My_Printf("%d, %c, %s, %f", 1, 'd', "hello word", 0.12);
     return 0;
 }
-#else
+#endif
+#if 0
 #include<stdio.h>
 #include<stdarg.h>
 //int
