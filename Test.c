@@ -2,7 +2,267 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <stdarg.h>	// 导入标准io头文件
 
+#if 1
+// int
+void PrintD(int Data){
+    if(Data/10 != 0)
+        PrintD(Data / 10);    // 逆递归，逆序处理
+    putchar(Data%10 + '0');   // 整数转字符 (如果不转则输出相应ASCII对应的标志位。比如65对应A，97对应a)
+}
+
+//float
+void PrintF(float Data){
+    int I_Data = (int)Data; // 取出整数部分
+    Data -= I_Data; // 取精度
+    int Flo = 1000000*Data; // 取出小数变成整数然后打印就行了！
+    PrintD(I_Data); // 打印整数
+    putchar('.');   // 分割符
+    PrintD(Flo);    // 小数部分
+}
+
+// char
+void PrintC(char C){
+    putchar(C);
+}
+
+// char*
+void PrintStr(const char * Str){
+    while(*Str != '\0') {
+        putchar(*Str++);
+    }
+}
+
+// 0x
+void PrintX(unsigned long Num,int Base){
+    if(Num <= 0) return;    // 判断递归是否小于0
+    PrintX(Num/Base, Base); // 逆序递归
+    putchar("0123456789abcdef"[Num%Base]);  // 取权值余，这是自然数转进制字符的一种表达式
+}
+
+void PrintP(unsigned int Num){
+    PrintX(Num,16);
+}
+
+// Printf
+int My_Printf(char* ForMat,...){
+    int num = 0;    // 打印字符数量
+
+    va_list va_l;   // 可变参数列表
+    va_start(va_l, ForMat);
+
+    char Line = *ForMat;    // 获取首字符
+    
+    while(Line != '\0'){    // 终结字符
+        if(Line == '%'){    // 判断是否遇到格式符号
+            Line = *(++ForMat); // 遇到的话递增判断后面的字符是什么
+            switch(Line) {   // 校验
+            case 'c':   // char
+                PrintC(va_arg(va_l, char));  // 传递参数
+                break;
+            case 's':   // str
+                PrintStr(va_arg(va_l, char*));
+                break;
+            case 'd':
+			    PrintD(va_arg(va_l, char));
+			    break;
+            case 'f':   // float
+                PrintF(va_arg(va_l, double));
+                break;
+            case 'p':   // 地址ptr,地址是多种类型的，所以使用void全能类型（c语言到时候会根据数据类型编号隐转换）
+                PrintP(va_arg(va_l, unsigned int));
+                break;
+            case 'o':   // 打印八进制
+                PrintX(va_arg(va_l, int), 8);
+                break;
+            case 'x':  // 打印十六进制
+                PrintX(va_arg(va_l, int), 16);
+                break;
+            default:    // 如果不是任何一个格式，则直接打印
+                putchar('%');
+                putchar(Line);
+                break;
+            }
+        }
+        else{
+            putchar(Line);
+        }
+        Line = *(++ForMat);
+        ++num;
+    }
+    va_end(va_l);
+    return num;
+}
+
+
+int main(){
+    My_Printf("%d, %c, %s, %f", 1,'d',"hello word",0.12);
+    return 0;
+}
+#else
+#include<stdio.h>
+#include<stdarg.h>
+//int
+void PrintD(int Data) {
+	//判断Data是否小于等于0保证递归栈尾不溢出
+
+	//逆递归，逆序处理
+	if(Data/10!=0)
+		PrintD(Data / 10);
+	//先Data取余，123/10余3
+	//然后在+'0'转换成字符的ascii码
+	// 因为字符1的ascii码是49，而0的ascii码是48，比如Data是自然数1那么1%10=1，1+48=字符49（后面来解释一下自然数与ascii码的关系）
+	putchar(Data % 10 +'0');//整数转字符
+							 //注意由于是逆递归，字符打印会被逆序打印出来（如果不懂什么是逆递归我后面会写一篇博客介绍）
+}
+//float
+void PrintF(float Data) {
+	//取出整数部分
+	int I_Data = (int)Data;
+	//float精度是6位(这里说的是32位编译器)，首先先将整数部分去掉
+	Data -= I_Data;
+	//取精度
+	int Flo = 1000000 * Data;
+	//打印整数
+	PrintD(I_Data);
+	//分割符
+	putchar('.');
+	//小数部分
+	PrintD(Flo);
+	//其实思路很简单，就是取出小数变成整数然后打印就行了！
+}
+//double
+void PrintLF(float Data) {
+	//取出整数部分
+	int I_Data = (int)Data;
+	//float精度是6位(这里说的是32位编译器)，首先先将整数部分去掉
+	Data -= I_Data;
+	//取精度
+	int Flo = 100000000 * Data;
+	//打印整数
+	PrintD(I_Data);
+	//分割符
+	putchar('.');
+	//小数部分
+	PrintD(Flo);
+	//其实思路很简单，就是取出小数变成整数然后打印就行了！
+}
+//char
+void PrintC(char C) {
+	putchar(C);
+}
+//char*
+void PrintStr(const char* Str) {
+	while (*Str != '\0') {
+		putchar(*Str++);
+	}
+}
+//0x
+void PrintX(unsigned long Num, int Base) {
+	//判断递归是否小于0
+	if (Num <= 0) {
+		return;
+	}
+	//逆序递归
+	PrintX(Num / Base, Base);
+	//取权值余，这是自然数转进制字符的一种表达式
+	putchar("0123456789abcdef"[Num%Base]);
+}
+void PrintP(unsigned int  num) {		
+	PrintX(num, 16);
+}
+//Printf
+int My_Printf(char* ForMat, ...) {
+	int num = 0;    //打印字符数量
+					//可变参数列表
+	va_list va_l;
+	va_start(va_l, ForMat);
+
+
+	//获取首字符
+	char Line = *ForMat;
+	while (Line != '\0') {//终结字符
+		if (Line == '%') {//判断是否遇到格式符号
+			Line = *++ForMat;//遇到的话递增判断后面的字符是什么
+			switch (Line) {    //校验
+			case 'c':    //char
+				PrintC(va_arg(va_l, char));    //传递参数
+				break;
+			case 's'://str
+				PrintStr(va_arg(va_l, char*));
+				break;
+			case 'd':
+				PrintD(va_arg(va_l, char));
+				break;
+			case 'f'://float 内存中float也是占用8个字节，需要一次性读取8个字节才能读到正确的值，
+				
+				PrintF(va_arg(va_l, double));
+				break;
+			case 'l'://double
+				PrintLF(va_arg(va_l, double));
+				break;
+			case 'p':
+				PrintP(va_arg(va_l, unsigned int ));
+				break;
+			case 'o'://打印八进制
+				PrintX(va_arg(va_l, int), 8);
+				break;
+			case 'x'://打印十六进制
+				PrintX(va_arg(va_l, int), 16);
+				break;
+			default://如果不是任何一个格式，则直接打印
+				putchar('%');
+				putchar(Line);
+				break;
+			}
+		}
+		else {
+			putchar(Line);
+		}
+		Line = *++ForMat;
+		++num;
+	}
+	return num;
+}
+
+int main() {
+	My_Printf("%d,%c,%s,%f,%l",1,'a',"hello world",0.12,0.323654);	
+	return 0;
+}
+#endif
+
+#if 0
+int main(){
+    double l = 123.1;
+    printf("%.2f", l);
+    return 0;
+}
+#endif
+
+#if 0
+int main(){
+    const char * c = "abc";
+    printf(c);
+    return 0;
+}
+#endif
+
+#if 0
+int main(){
+    int i = 1;
+    printf("%d,%d\n", ++i, ++i);    //3,3
+    printf("%d,%d\n", ++i, i++);    //5,3
+    printf("%d,%d\n", i++, i++);    //6,5
+    printf("%d,%d\n", i++, ++i);    //8,9
+    int x=2, y=3;
+	printf("%d,%d\n",(x++)+y,++y);	// 等价x++ + y
+    return 0;
+}
+#endif
+
+#if 0
+// KMP算法
 int BF(char S[],char T[])
 {
 	int i=0,j=0;
@@ -49,6 +309,7 @@ int main(){
     printf("%d", BF(a, b));
     return 0;
 }
+#endif
 
 #if 0
 char* my_strcat(char *dst, const char *src){
