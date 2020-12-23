@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <stdarg.h>	// 导入标准io头文件
+#include <stdarg.h>	
 
 #if 1
 // int
