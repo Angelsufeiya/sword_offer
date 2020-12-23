@@ -9,6 +9,9 @@ struct ListNode{
     ListNode* m_pnext;
 };
 
+
+
+#if 0
 #ifdef __cplusplus  // 检测工程是否为C++工程
 
 extern "C" 
@@ -24,6 +27,7 @@ extern "C"
 
 #ifdef __cplusplus 
 }
+#endif
 #endif
 
 #if 0
