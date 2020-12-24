@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <stdio.h>
 using namespace std;
 
 struct ListNode{
@@ -10,7 +9,53 @@ struct ListNode{
 };
 
 
+int main(){
+    const int a = 10;
+    const int b;
+    return 0;
+}
 
+#if 0
+#define MAX_SIZE 100
+#define MAX(a, b) (a > b ? a : b)
+
+int main(){
+    int i = MAX_SIZE;
+    cout << i << endl;
+    int max = MAX(2, 1);
+    cout << max << endl;
+    cout << MAX(3,4) << endl;
+    return 0;
+}
+#endif
+#if 0
+int& Add(int a, int b)
+{
+	int c = a + b;
+	return c; 
+}
+
+int main() {
+    int& ret = Add(1, 2);
+    Add(3, 4);
+    cout << ret << endl;    // 警告:返回与局部变量“c”关联的堆栈内存引用
+    return 0;
+}
+#endif
+#if 0
+int main(){
+    int a = 10;
+
+    if(true){
+        int& ra = a;
+        ra = 20;
+    }
+    //ra = 30;    // 使用未声明的标识符
+    a = 30;
+
+    return 0;
+}
+#endif
 #if 0
 #ifdef __cplusplus  // 检测工程是否为C++工程
 
