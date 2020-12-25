@@ -5,11 +5,14 @@
 #include <stdarg.h>
 
 
+
+#if 0
 int main(){
     const int a;
     int arr[a] = {1,2,3};
     return 0;
 }
+#endif
 
 #if 0
 int Sum(int first,int second, ...)
