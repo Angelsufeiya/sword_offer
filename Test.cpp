@@ -9,11 +9,77 @@ struct ListNode{
 };
 
 
+
+class String
+{
+	char* _str;
+public:
+    String(const char* str = "")
+    {
+		// 构造string类对象时，如果传递nullptr指针，认为程序非法，此处断言下 
+		if(nullptr == str)
+		{
+            assert(false);
+			return; 
+		}
+        _str = new char[strlen(str) + 1];
+        strcpy(_str, str);
+    }
+
+    String(const String& s)
+        :_str(new char[strlen(s._str)+1])
+    {
+        strcpy(_str, s._str);    
+    }
+
+    // const 是因为对 s 不需要修改，安全性更高
+    // 参数 & 是因为不需要传值拷贝、效率高
+    // 返回值 & 是为了连续赋值（效率高）
+    String& operator=(const String& s){
+        if(this != &s)  // 检测是否自己给自己赋值
+        {
+            /*delete[] _str;
+            _str = new char[strlen(s._str)+1];
+            strcpy(_str, s._str);*/
+
+            // 开辟空间如果失败，不会破坏原本对象
+            char *temp = new char[strlen(s._str)+1];
+            strcpy(temp, s._str);
+            delete[] _str;
+            _str = temp;
+        }
+        return *this;
+    }
+
+	~String() {
+		if(_str)    // 判断当前空间是否已经释放、置空
+        {
+        	delete[] _str;
+			_str = nullptr;
+    	}
+	}
+};
+
+// 测试
+void TestString() {
+    String s1("hello bit!!!");
+    String s2(s1);
+}
+
+int main(){
+    TestString();
+    return 0;
+}
+
+#if 0
+
 int main(){
     const int a = 10;
     const int b;
     return 0;
 }
+
+#endif
 
 #if 0
 #define MAX_SIZE 100
