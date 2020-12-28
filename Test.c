@@ -1,11 +1,48 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <stdarg.h>
 
 
+#if 0
+#define Len 33
 
+int main(){
+    char *p = NULL;
+    unsigned long lastaddr = 0;
+    int i = 0;
+    while(i < 5){
+        p = malloc(sizeof(char) * Len);
+        printf("%d:%10p, size:%lu\n", i++, p, (int)p - lastaddr);
+        lastaddr = (int)p;
+    }
+    return 0;
+}
+#endif
+
+#if 0
+int main(){
+    char *p = (char *)malloc(0);
+    char *p1 = (char *)malloc(5);
+    char *p2 = (char *)malloc(25);
+    char *p3 = (char *)malloc(39);
+    char *p4 = (char *)malloc(41);
+
+    printf("p size %d\n", _msize(p));
+    printf("p1 size %d\n", malloc_usable_size(p1));
+    printf("p2 size %d\n", malloc_usable_size(p2));
+    printf("p3 size %d\n", malloc_usable_size(p3));
+    printf("p4 size %d\n", malloc_usable_size(p4));
+
+    free(p);
+    free(p1);
+    free(p2);
+    free(p3);
+    free(p4);
+
+    return 0;
+}
+
+#endif
 #if 0
 int main(){
     const int a;
