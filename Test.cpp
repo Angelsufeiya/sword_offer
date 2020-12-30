@@ -10,8 +10,119 @@ struct ListNode{
 
 
 
+#if 0
+int main(){
+    int arr[5] = {1, 2, 3, 4, 5};
+    vector<int> v(arr, arr+5);
+    auto it = v.begin();
+    v.reserve(100);
+    while(it != v.end()){
+        cout << *it << ' ';
+        ++it;
+    }
+    return 0;
+}
+#endif
+#if 0
+int main() {
+	int a[] = { 1, 2, 3, 4 };
+	vector<int> v(a, a + sizeof(a) / sizeof(int));
 
+	// 实现删除v中的所有偶数
+	// 下面的程序会崩溃掉，如果是偶数，erase导致it失效 
+	// 对失效的迭代器进行++it，会导致程序崩溃 
+	vector<int>::iterator it = v.begin();
+	while (it != v.end())
+	{
+		if (*it % 2 == 0)
+			v.erase(it);
+		++it;
+	}
 
+	// 以上程序要改成下面这样，erase会返回删除位置的下一个位置 
+	/*vector<int>::iterator it = v.begin();
+	while (it != v.end())
+	{
+		if (*it % 2 == 0)
+			it = v.erase(it);
+		else
+			++it;
+	}*/
+	return 0;
+}
+#endif
+#if 0
+int main() {
+    vector<int> v;
+    cout << v.size() << " " << v.capacity()<< endl; // 空vector
+
+    for (int i = 0;i < 10; i++) v.push_back(i);
+    cout << "first addr: " << &(*v.begin()) << endl;
+    cout << "size = " << v.size() << " capacity = " << v.capacity() << endl;    // size = 10 capacity = 16
+    cout << "--------------------" << endl;
+
+    // 第一种情况：insert一个元素（在容量足够的情况下并不会重新分配内存）【该失效仅仅是无法使用该迭代器遍历或所指向的元素改变了】
+    vector<int>::iterator it_begin = v.begin(); // 插入前定义一个迭代器，指向第一个元素
+    vector<int>::iterator it_end = v.end()-1;   // 插入前定义一个迭代器，指向最后一个元素
+    v.insert(v.begin()+1, 1);   // 在第二个元素位置插入1
+    cout << "插入一个元素后:" << endl;
+    cout << "first addr: " << &(*v.begin()) << endl;    // 首元素地址未变
+    cout << "size = " << v.size() << " capacity = " << v.capacity() << endl;    // size = 11 capacity = 16
+    cout << *it_begin << endl;  // 未失效，仍然打印出第一个元素0
+    cout << *it_end << endl;    // 失效，打印出了9的前一个元素8（并未出现错误，但这仍是迭代器失效）
+    cout << "--------------------" << endl;
+
+    // 此时size=11 capacity=16，紧接着再插入五个元素
+    cout << "再插入五个元素：" << endl;
+    v.push_back(10);
+    v.push_back(11);
+    v.push_back(12);
+    v.push_back(13);
+    v.push_back(14);
+    cout << "first addr: " << &(*v.begin()) << endl;    // 首元素地址未变
+    cout << "size = " << v.size() << " capacity = " << v.capacity() << endl;    // size = 16 capacity = 16
+    cout << "vector 满了" << endl;
+    cout << "--------------------" << endl;
+
+    // 接下来再insert或push_back一个元素均会出现内存的重新分配。均会造成先前定义的迭代器失效【该失效会出错，访问野指针的内存】
+    // 第二种情况：push_back一个即将重新分配内存的vector[insert()也会出现同样的问题]
+    vector<int>::iterator iter = v.begin(); // 内存重新分配前定义一个迭代器
+    v.push_back(12);
+    cout << "再插入一个元素内存重新分配:" << endl;
+    cout << "first addr: " << &(*v.begin()) << endl;    // 内存重新分配，首元素地址改变了，容量也多一倍
+    cout << "size = " << v.size() << " capacity = "<< v.capacity() <<  endl;    // size = 17 capacity = 32
+    cout << *iter << endl;  // 当重新分配内存后再调用重新分配内存前定义的迭代器，便会发生debug assertion failed错误
+    cout << "--------------------" << endl;
+
+    for (vector<int>::iterator it = v.begin();it != v.end(); ++it)
+        cout << *it << " ";
+    return 0;
+}
+#endif
+
+#if 0
+// insert/erase导致的迭代器失效 
+int main() {
+	int a[] = { 1, 2, 3, 4 };
+	vector<int> v(a, a + sizeof(a) / sizeof(int));
+
+	// 使用find查找3所在位置的iterator
+	vector<int>::iterator pos = find(v.begin(), v.end(), 3);
+
+	// 删除pos位置的数据，导致pos迭代器失效。 
+	v.erase(pos);
+	cout << *pos << endl; // 此处会导致非法访问
+
+	// 在pos位置插入数据，导致pos迭代器失效。
+	// insert会导致迭代器失效，是因为insert可能会导致增容，
+	// 增容后pos还指向原来的空间，而原来的空间已经释放了。 
+	pos = find(v.begin(), v.end(), 3);
+	v.insert(pos, 30);
+	cout << *pos << endl; // 此处会导致非法访问
+	
+	return 0;
+}
+#endif
 #if 0
 template<class T1, class T2>
 class Data
