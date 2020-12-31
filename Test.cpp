@@ -3,12 +3,95 @@
 #include <string>
 using namespace std;
 
-struct ListNode{
-    int m_value;
-    ListNode* m_pnext;
+#if 0
+class Person
+{
+protected:
+    string _name; // 姓名 
+    string _sex; // 性别 
+    int _age; // 年龄
 };
 
+class Student : public Person
+{
+public:
+    int _No; // 学号 
+};
 
+int main() {
+    Student sobj;
+
+    // 1.子类对象可以赋值给父类对象/指针/引用 
+    Person pobj = sobj;
+    Person* pp = &sobj;
+    Person& rp = sobj;
+
+    // 2.基类对象不能赋值给派生类对象 
+    //sobj = pobj;
+
+    // 3.基类的指针可以通过强制类型转换赋值给派生类的指针
+    Student* ps2 = (Student*)pp; // 这种情况转换时虽然可以，但是会存在越界访问的问题
+    ps2->_No = 10;
+
+    return 0;
+}
+#endif
+
+#if 0
+class A
+{
+public:
+    void fun() {
+        cout << "func()" << endl;
+    }
+};
+
+class B : public A
+{
+public:
+    void fun(int i)
+    {
+        A::fun();   // func()
+        cout << "func(int i)->" << i << endl;   // func(int i)->10
+    }
+};
+
+int main() {
+    B b;
+    b.fun(10);
+
+    return 0;
+}
+#endif
+
+#if 0
+class Person
+{
+protected:
+    string _name = "小李子"; // 姓名
+    int _num = 111; // 身份证号 
+};
+
+class Student : public Person
+{
+public:
+    void Print()
+    {
+        cout << " 姓名:" << _name << endl;
+        cout << " 身份证号:" << Person::_num << endl;
+        cout << " 学号:" << _num << endl;
+    }
+protected:
+    int _num = 999; // 学号 
+};
+
+int main() {
+    Student s1;
+    s1.Print();
+
+    return 0;
+}
+#endif
 
 #if 0
 int main(){
