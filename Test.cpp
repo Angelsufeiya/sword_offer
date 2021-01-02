@@ -4,7 +4,91 @@
 using namespace std;
 
 
+#if 0
+class A{
+    
+public:
+    int a;
+};
 
+class B : virtual public A{
+
+public:
+    int b;
+};
+
+int main(){
+    B a;
+    a.a = 1;
+    a.b = 2;    
+    cout << sizeof(B) << endl;
+
+    return 0;
+}
+#endif
+/*
+#if 1
+class A{
+    
+public:
+    int a;
+};
+
+class B : public A{
+
+public:
+    int b;
+};
+
+class C : public A{
+
+public:
+    int c;
+};
+
+class D : public B, public C{
+
+public:
+    int d;
+};
+
+int main(){
+    cout << sizeof(D) << endl;
+
+    return 0;
+}
+#else
+class A{
+    
+public:
+    int a;
+};
+
+class B : virtual public A{
+
+public:
+    int b;
+};
+
+class C : virtual public A{
+
+public:
+    int c;
+};
+
+class D : public B, public C{
+
+public:
+    int d;
+};
+
+int main(){
+    cout << sizeof(D) << endl;
+
+    return 0;
+}
+#endif
+*/
 
 #if 0
 class Person
