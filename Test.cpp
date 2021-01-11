@@ -4,8 +4,95 @@
 using namespace std;
 
 
+#if 0
+// [剑指Offer]21：调整数组顺序使奇数位于偶数前面
+
+class Solution {
+public:
+    vector<int> exchange(vector<int>& array) {
+        for(int i = 0, j = array.size()-1; i < j; ++i, --j){
+            while(i < j && array[i]%2 == 1) ++i;
+            while(i < j && array[j]%2 == 0) --j;
+            if(i < j) swap(array[i], array[j]);
+        }
+        return array;
+    }
+};
+
+class Solution {
+public:
+    void reOrderArray(vector<int> &array) {
+        vector<int> res;
+        vector<int> tmp;
+        for(int i = 0; i < array.size(); ++i){
+            if(array[i]%2 == 1) res.push_back(array[i]);
+            else tmp.push_back(array[i]);
+        }
+        for(int i = 0; i < tmp.size(); ++i){
+            res.push_back(tmp[i]);
+        }
+        array = res;
+    }
+};
+
+#endif
 
 
+#if 0
+// [剑指Offer]20：表示数值的字符串
+
+class Solution {
+public:
+    bool isNumeric(char* str)
+    {
+        if(str == nullptr) return false;
+        
+        if(*str == '+' || *str == '-') ++str;
+        if(*str == '\0') return false;
+        
+        int dot = 0, e = 0;
+        while(*str != '\0'){
+            if(*str >= '0' && *str <= '9'){
+                ++str;
+            }
+            else if(*str == '.'){
+                if(dot != 0 || e != 0) return false;
+                ++str;
+                dot = 1;
+            }
+            else if(*str == 'e' || *str == 'E'){
+                if(e != 0) return false;
+                ++str;
+                e = 1;
+                if(*str == '+' || *str == '-') str++;
+                if(*str == '\0') return false;
+            }
+            else return false;
+        }
+        return true;
+    }
+};
+
+#endif
+
+#if 0
+int main() {
+    int arr[] = {1,2,3,4,5,6,7,8};
+    vector<int> s(arr, arr+8);
+    
+    for (auto i = s.begin(); i != s.end(); ++i) {
+        cout << *i << " ";
+        if (*i == 3) {
+            i = s.insert(i, 30);
+            ++i;
+        }
+        
+    }
+    for (auto i : s) cout << i << " ";
+
+    return 0;
+}
+#endif
 
 
 #if 0
