@@ -5,6 +5,203 @@ using namespace std;
 
 
 
+#if 0
+// 判断链表是否有环
+/*
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) :
+        val(x), next(NULL) {
+    }
+};
+*/
+//判断链表是否有循环（有返回1；没有返回0）
+int SListHasCycle(SList* plist)
+{
+	SListNode *fast = plist->_head;
+	SListNode *slow = plist->_head;
+
+	while (slow && fast && fast->_next)
+	{
+		slow = slow->_next;
+		fast = fast->_next->_next;
+		if (slow == fast){
+			return 1;
+		}
+	}
+	return 0;
+}
+
+// 得到链表中环的第一个节点
+class Solution {
+public:
+    ListNode* EntryNodeOfLoop(ListNode* pHead){
+        if(!pHead) return nullptr;
+        
+        ListNode* fast = pHead;
+        ListNode* low = pHead;
+        while(fast && fast->next && fast->next->next){
+            fast = fast->next->next;
+            low = low->next;
+            if(fast == low) break;
+        }
+        if(!fast || !fast->next || !fast->next->next) return nullptr;
+        low = pHead;
+        while(low != fast){
+            low = low->next;
+            fast = fast->next;
+        }
+        return low;
+    }
+};
+
+#endif
+
+
+#if 0
+// 反转链表
+ListNode* reverseList(ListNode* head) {
+	if(head == NULL || head -> next == NULL) return head;
+	
+    ListNode* cur = NULL, *pre = head;
+    while(pre != NULL){
+        ListNode* t = pre->next;
+        pre->next = cur;
+        cur = pre;
+        pre = t;
+    }
+    return cur;
+}
+
+ListNode* reverseList(ListNode* head) {
+    if(head == NULL || head->next == NULL) return head;
+
+    // 递归调用反转的每一个节点
+    ListNode *node = reverseList(head->next);
+    // 每一个节点是怎么反转的
+    head->next->next = head;
+    // 防止链表循环
+    head->next = NULL;
+    // 每层节点都返回node，也就是最后一个节点
+    return node;
+}
+
+#endif
+
+#if 0
+// 合并两个排序的链表
+/*
+struct ListNode {
+	int val;
+	struct ListNode *next;
+	ListNode(int x) :
+			val(x), next(NULL) {
+	}
+};*/
+class Solution {
+public:
+    ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
+    {
+        if(pHead1 == nullptr) return pHead2;
+        else if(pHead2 == nullptr) return pHead1;
+        
+        if(pHead1->val <= pHead2->val){
+            pHead1->next = Merge(pHead1->next, pHead2);
+            return pHead1;
+        }
+        else{
+            pHead2->next = Merge(pHead1, pHead2->next);
+            return pHead2;
+        }
+    }
+};
+
+class Solution {
+public:
+    ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
+    {
+        ListNode* tHead = new ListNode(1);
+        ListNode* cur = tHead;
+        while(pHead1 && pHead2){
+            if(pHead1->val <= pHead2->val){
+                cur->next = pHead1;
+                pHead1 = pHead1->next;
+            }
+            else{
+                cur->next = pHead2;
+                pHead2 = pHead2->next;
+            }
+            cur = cur->next;
+        }
+        cur->next = pHead1 ? pHead1 : pHead2;
+        return tHead->next;
+    }
+};
+
+#endif
+
+#if 0
+
+// 树的子结构
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+class Solution {
+public:
+    bool dfs(TreeNode* r1, TreeNode* r2){
+        if(!r2) return true;
+        if(!r1) return false;
+        return r1->val==r2->val && dfs(r1->left,r2->left) && dfs(r1->right,r2->right);
+    }
+    bool HasSubtree(TreeNode* pRoot1, TreeNode* pRoot2){
+        if(!pRoot1 || !pRoot2) return false;
+        
+        return dfs(pRoot1,pRoot2) || HasSubtree(pRoot1->left,pRoot2) || HasSubtree(pRoot1->right,pRoot2);
+    }
+};
+
+#endif
+
+#if 0
+// 链表中倒数第K个节点
+
+/*
+struct ListNode {
+	int val;
+	struct ListNode *next;
+	ListNode(int x) :
+			val(x), next(NULL) {
+	}
+};*/
+class Solution {
+public:
+    ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
+        if(pListHead == nullptr || k == 0) return nullptr;
+        
+        ListNode* cur = pListHead;
+        int i = k-1;
+        while(cur->next != nullptr && i > 0){
+            cur = cur->next;
+            --i;
+        }
+        if(i > 0) return nullptr;
+        
+        ListNode* res = pListHead;
+        while(cur->next != nullptr){
+            cur = cur->next;
+            res = res->next;
+        }
+        return res;
+    }
+};
+#endif
 
 #if 0
 // [剑指Offer]21：调整数组顺序使奇数位于偶数前面
