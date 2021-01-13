@@ -5,6 +5,41 @@ using namespace std;
 
 
 
+
+#if 0
+// 顺时针打印矩阵
+class Solution {
+public:
+    vector<int> printMatrix(vector<vector<int> > matrix) {
+        vector<int> res;
+        if(matrix.size() == 0 || matrix[0].size() == 0) return res;
+        
+        int top = 0, bottom = matrix.size()-1, left = 0, right = matrix[0].size()-1;
+        while(bottom >= top && right >= left){
+            // 向右
+            for(int i = left; i <= right; ++i){
+                res.push_back(matrix[top][i]);
+            }
+            // 向下
+            for(int i = top+1; i <= bottom; ++i){
+                res.push_back(matrix[i][right]);
+            }
+            // 向左
+            for(int i = right-1; i >= left && bottom > top; --i){
+                res.push_back(matrix[bottom][i]);
+            }
+            // 向上
+            for(int i = bottom-1; i > top && left < right; --i){
+                res.push_back(matrix[i][left]);
+            }
+            ++top, --bottom, ++left, --right;
+        }
+        return res;
+    }
+};
+
+#endif
+
 #if 0
 
 /*
