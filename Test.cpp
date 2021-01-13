@@ -4,7 +4,86 @@
 using namespace std;
 
 
+#if 0
+// 对称的二叉树
+/*
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+            val(x), left(NULL), right(NULL) {
+    }
+};
+*/
+class Solution {
+public:
+    bool isSymmetrical(TreeNode* pRoot){
+        if(!pRoot) return true;
+        return isSym(pRoot->left, pRoot->right);
+    }
+    bool isSym(TreeNode* A, TreeNode* B){
+        if(!A && !B) return true;
+        if(!A || !B) return false;
+        if(A->val != B->val) return false;
+        return isSym(A->left, B->right) && isSym(A->right, B->left);
+    }
+};
+#endif
+#if 0
+// 从尾到头打印链表
+/**
+*  struct ListNode {
+*        int val;
+*        struct ListNode *next;
+*        ListNode(int x) :
+*              val(x), next(NULL) {
+*        }
+*  };
+*/
+class Solution {
+public:
+    vector<int> printListFromTailToHead(ListNode* head) {
+        vector<int> v;
+        if(!head) return v;
+        while(head){
+            int tmp = head->val;
+            v.push_back(tmp);
+            head = head->next;
+        }
+        reverse(v.begin(), v.end());
+        return v;
+    }
+};
 
+#endif
+
+#if 0
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+class Solution {
+public:
+    void Mirror(TreeNode *pRoot) {
+        if(!pRoot) return;
+        if(!pRoot->left && !pRoot->right) return;
+        //交换左右子树
+        TreeNode* tmp = pRoot->left;
+        pRoot->left = pRoot->right;
+        pRoot->right = tmp;
+        //递归左右子树镜像
+        if(pRoot->left) Mirror(pRoot->left);
+        if(pRoot->right) Mirror(pRoot->right);
+    }
+};
+
+#endif
 #if 0
 // 判断链表是否有环
 /*
