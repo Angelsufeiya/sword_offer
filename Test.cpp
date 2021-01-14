@@ -5,6 +5,43 @@ using namespace std;
 
 
 
+#if 0
+bool isNumber(string s) {
+    if(s.size() == 0) return false;
+    int i = 0;
+    if(s[i] == '+' || s[i] == '-') ++i;
+    
+    int num = 0, dot = 0, e = 0;
+    for(int i = 0; i < s.size(); ){
+        if(s[i] >= '0' && s[i] <= '9') {
+            ++i;
+            num = 1;
+        }
+        else if(s[i] == '.'){
+            if(dot != 0 || e != 0) return false;
+            ++i;
+            ++dot;
+            if(s[i] == '\0') return false;
+        }
+        else if(s[i] == 'e' || s[i] == 'E'){
+            if(num != 0 || e != 0) return false;
+            ++i;
+            ++e;
+            if(s[i] == '+' || s[i] == '-') ++i;
+            if(s[i] == '\0') return false;
+        }
+        else return false;
+    }
+    return true;
+}
+
+int main(){
+    string s = "e9";
+    cout << isNumber(s) << endl;
+    return 0;
+}
+    
+#endif
 
 #if 0
 // 顺时针打印矩阵
