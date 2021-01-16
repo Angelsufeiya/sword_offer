@@ -4,7 +4,25 @@
 #include <stack>
 using namespace std;
 
+#if 0
+class Solution {
+public:
+    bool IsPopOrder(vector<int> pushV,vector<int> popV) {
+        stack<int> tmp;
+        int i = 0;
+        
+        for(auto & vi : pushV){
+            tmp.push(vi);
+            
+            for(; !tmp.empty() && tmp.top() == popV[i]; ++i){
+                tmp.pop();
+            }
+        }
+        return tmp.empty();
+    }
+};
 
+#endif
 #if 0
 class MinStack {
     stack<int> m_data;
