@@ -5,6 +5,7 @@
 using namespace std;
 
 #if 0
+// 栈的插入与输出
 class Solution {
 public:
     bool IsPopOrder(vector<int> pushV,vector<int> popV) {
