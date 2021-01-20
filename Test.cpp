@@ -4,6 +4,89 @@
 #include <stack>
 using namespace std;
 
+
+
+
+#if 0
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+// 二叉树是否有和为某值的路径
+bool hasPathSum(TreeNode* root, int sum) {
+    if (nullptr == root) return false;
+    else if (root->val == sum && root->left == nullptr && root->right == nullptr) {
+        return true;
+    }
+    return hasPathSum(root->left, sum - root->val) || hasPathSum(root->right, sum - root->val);
+}
+
+// 找出和为某值的所有路径
+class Solution {
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        vector<vector<int>> res;
+        vector<int> cur;
+        dfs(root, sum, res, cur);
+        return res;
+    }
+
+    void dfs(TreeNode* root, int sum, vector<vector<int>>& res, vector<int>& cur){
+        if(!root) return;
+        cur.push_back(root->val);
+        sum -= root->val;
+        if(sum == 0 && !root->left && !root->right) res.push_back(cur); // 满足路径条件
+
+        dfs(root->left,  sum, res, cur);
+        dfs(root->right, sum, res, cur);
+        cur.pop_back(); // 关键点：回溯
+    }
+};
+
+#endif
+
+
+#if 0
+// 二叉搜索树的后序遍历
+class Solution {
+public:
+    bool isBST(vector<int>& post, int l, int r){    // [l, r]表示当前区间，左闭右闭
+        if(l >= r) return true;
+        int root = post[r];
+        // 在二叉搜索树中左子树节点的值小于跟节点的值
+        int i = l;
+        while(i < r){
+            if(post[i] > root) break;
+            ++i;
+        }
+        // 在二叉搜索树中右子树节点的值大于跟节点的值
+        int j = i;
+        while(j < r){
+            if(post[j] < root) return false;
+            ++j;
+        }
+        //[l, i - 1]表示左子树， [i, r - 1]表示右子树
+        return isBST(post, l, i - 1) && isBST(post, i, r - 1);//递归判断左子树及右子树
+    }
+
+    bool verifyPostorder(vector<int>& postorder) {
+        int sz = postorder.size();
+        if(sz <= 2) return true;
+        return isBST(postorder, 0, sz-1);
+    }
+};
+
+#endif
+
+#if 0
+// 层序遍历
+
+// 一维数组
 class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
@@ -41,6 +124,95 @@ public:
         return vv;
     }
 };
+
+// 二维数组
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int> > vv;
+        if(!root) return vv;
+
+        queue<TreeNode*> qu;
+        qu.push(root);
+        while(!qu.empty()){
+            vector<int> v;	// 每层需要重新开辟（可在循环外开辟，在循环结束时，对v进行清理）
+            int len = qu.size();	// 每次需要重新定义变量（可在循环外，在循环结束时，重新计算len）
+            for(int i = 0; i < len; ++i){
+                TreeNode* tmp = qu.front();
+                qu.pop();
+                v.push_back(tmp->val);
+                if(tmp->left) qu.push(tmp->left);
+                if(tmp->right) qu.push(tmp->right);
+            }
+            vv.push_back(v);
+        }
+        return vv;
+    }
+};
+
+// 之字形
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int> > vv;
+        if(!root) return vv;
+
+        queue<TreeNode*> qu;
+        qu.push(root);
+        int flag = 0;
+        while(!qu.empty()){
+            vector<int> v;
+            int len = qu.size();
+            for(int i = 0; i < len; ++i){
+                TreeNode* tmp = qu.front();
+                qu.pop();
+                v.push_back(tmp->val);
+                if(tmp->left) qu.push(tmp->left);
+                if(tmp->right) qu.push(tmp->right);
+            }
+            if(flag) reverse(v.begin(), v.end());
+            vv.push_back(v);
+            flag ^= 1;
+        }
+        return vv;
+    }
+};
+
+// 从下到上
+class Solution {
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        vector<vector<int> > vv;
+        if(!root) return vv;
+
+        vector<int> temp;
+        queue<TreeNode*> qu;
+        TreeNode* cur;
+        int len = 1;
+        qu.push(root);
+        while(!qu.empty()){
+            for(int i = 0; i < len; i++){
+                cur = qu.front();
+                temp.push_back(cur->val);
+                qu.pop();
+                if(cur->left) qu.push(cur->left);
+                if(cur->right) qu.push(cur->right);
+            }
+            vv.push_back(temp);
+            temp.clear();
+            len = qu.size();
+        }
+
+        reverse(vv.begin(),vv.end());
+        //vector<vector<int>> res;
+        //for(int i = 1; i <= vv.size();i++){
+        //    res.push_back(vv[vv.size() - i]);
+        //}
+
+        return vv;
+    }
+};
+#endif
 
 #if 0
 // 栈的插入与输出
