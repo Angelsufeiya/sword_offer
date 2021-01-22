@@ -2,8 +2,466 @@
 #include <vector>
 #include <string>
 #include <stack>
+#include <queue>
+#include <set>
 using namespace std;
 
+
+#if 0
+// 连续子数组的最大和
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& array) {
+        assert(!array.empty());
+
+        int sum = array[0], res = array[0];
+        
+        for(int i = 1; i < array.size(); i++){
+            sum >= 0 ? sum += array[i] : sum = array[i];
+            if(sum > res) res = sum;
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        assert(!nums.empty());
+
+        int sz = nums.size();
+        int Max = nums[0];
+        // 如果当前值小于0，重新开始（全局最大值更新）
+        for(int i = 1; i < sz; ++i){
+            // 更新当前最大值
+            if(nums[i-1] > 0) nums[i] += nums[i-1];
+            // 更新全局最大值
+            Max = max(nums[i], Max);
+        }
+        return Max;
+    }
+};
+
+#endif
+
+#if 0
+// 数据流中的中位数
+class MedianFinder {
+    priority_queue<int, vector<int>, less<int>> maxheap;
+    priority_queue<int, vector<int>, greater<int>> minheap;
+public:
+    /** initialize your data structure here. */
+    MedianFinder() {}
+    
+    void addNum(int num) {
+        if(maxheap.size() == minheap.size()){
+            maxheap.push(num);
+            minheap.push(maxheap.top());
+            maxheap.pop();
+        }
+        else{
+            minheap.push(num);
+            maxheap.push(minheap.top());
+            minheap.pop();
+        }
+    }
+    
+    double findMedian() {
+        int maxSz = maxheap.size(), minSz = minheap.size();
+        double mid1 = maxheap.top(), mid2 = minheap.top();
+        return maxSz == minSz ? ((mid1+mid2)/2) : mid2;
+    }
+};
+
+#endif
+
+
+#if 0
+// 最小的K个数
+
+class Solution {
+public:
+    vector<int> getLeastNumbers(vector<int>& arr, int k) {
+        vector<int> res;
+        sort(arr.begin(), arr.end());
+        for(int i = 0; i < k; ++i){
+            res.push_back(arr[i]);
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    void QuickSort(vector<int>& v, int left, int right, int k){
+        if(left > right) return;
+        int i = left, j = right, tmp = v[left];
+        while(i < j){
+            while(v[j] >= tmp && i < j) j--;
+            while(v[i] <= tmp && i < j) i++;
+            if(i < j) swap(v[i], v[j]);
+        }
+        v[left] = v[i];
+        v[i] = tmp;
+
+        if(i == k-1) return;
+        else if(i < k-1) return QuickSort(v, i+1, right, k);
+        else return QuickSort(v, left, i-1, k);
+    }
+
+    vector<int> getLeastNumbers(vector<int>& arr, int k) {
+        QuickSort(arr, 0, arr.size()-1, k);
+        vector<int> res;
+        for(int i = 0; i < k; i++) res.push_back(arr[i]);
+        return res;
+    }
+};
+
+class Solution {
+public:
+    vector<int> getLeastNumbers(vector<int>& arr, int k) {
+        vector<int> vec;
+        if (k == 0) return vec; // 排除 0 的情况
+        
+        priority_queue<int> Q;
+        for (int i = 0; i < k; ++i) {
+            Q.push(arr[i]);
+        }
+        for (int i = k; i < arr.size(); ++i) {
+            if (Q.top() > arr[i]) {
+                Q.pop();
+                Q.push(arr[i]);
+            }
+        }
+        for (int i = 0; i < k; ++i) {
+            vec.push_back(Q.top());
+            Q.pop();
+        }
+        return vec;
+    }
+};
+
+#endif
+
+#if 0
+// 求数组中出现超过一半的数字
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int num = nums[nums.size()/2];
+        if(nums.size()/2 < count(nums.begin(), nums.end(), num)){
+            return num;
+        }
+        return 0;
+    }
+};
+
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int n = nums.size();
+        unordered_map<int, int> mp;
+        for (auto x : nums) mp[x]++;
+        for (auto [k, v] : mp) {
+            if (v > n/2) return k;
+        }
+        return 0;
+    }
+};
+
+class Solution {
+public:
+    int MoreThanHalfNum_Solution(vector<int> v) {
+        int num = v[0], count_i = 1;
+        for(int i = 1; i < v.size(); i++){
+            if(v[i] == v[i-1]) count_i++;
+            else {
+                if(count_i <= 1) num = v[i];
+                else count_i--;
+            }
+        }
+        if (v.size() / 2 < count(v.begin(), v.end(), num)) return num;
+        return 0;
+    }
+};
+
+#endif
+
+
+#if 0
+// 字符串的排列
+
+class Solution {
+public:
+    vector<string> permutation(string s) {
+        vector<string> res;
+        dfs(s, res, 0); // 从 s 的第一位开始排列起，所以传了 0
+        return res;
+    }
+    void dfs(string &s, vector<string> &res, int depth)
+    {
+        if(depth >= s.size()-1)
+        {
+            res.push_back(s);   // 某条路从头排列到尾了，把这条路的结果输入 res
+            return ;
+        }
+        unordered_set<char> used;  // 用于剪枝，不能定义为全局，因为每次递归需要创建一个新的 hashset
+        for(int i = depth; i < s.size(); ++i)
+        {
+            if(used.count(s[i])) continue;  // 如果是重复的元素，不要再排一次
+            
+            used.insert(s[i]);
+            swap(s[depth],s[i]);
+            dfs(s, res, depth+1);   // 开始往下一层递进
+            swap(s[depth],s[i]);    // 回溯撤销操作
+        }
+    }
+};
+
+#endif
+
+
+#if 0
+// 序列化二叉树
+
+class Codec {
+public:
+    // Encodes a tree to a single string.
+    // 队列层序遍历
+    string serialize(TreeNode* root) {
+        string res = "";
+        if(!root) return res;
+
+        queue<TreeNode*> qu;
+        qu.push(root);
+        TreeNode* cur = new TreeNode(0);
+        while(!qu.empty()){
+            // 记录队列里的元素长度
+            int len = qu.size();
+            while(len--){
+                cur = qu.front();
+                qu.pop();
+                if(!cur) res += "null";
+                else res += to_string(cur->val);
+                res += ',';
+                if(cur){
+                    qu.push(cur->left);
+                    qu.push(cur->right);
+                }
+            }
+        }
+        res.pop_back();
+        return res;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if(data.size() == 0) return nullptr;
+        int len = data.size();
+        int i = 0;
+        vector<TreeNode*> v;
+        while(i < len){
+            //遇到逗号停下来。
+            string str = "";
+            while(i<len && data[i]!=','){
+                str += data[i];
+                i++;
+            }
+            if(str == "null"){
+                TreeNode* tmp = nullptr;
+                v.push_back(tmp);
+            }
+            else{
+                int temp = stoi(str);
+                TreeNode* cur = new TreeNode(temp);
+                v.push_back(cur);
+            }
+            i++;
+        }
+        // 遍历v，构建二叉树
+        for(int i = 0, j = 1; j < v.size(); ++i){
+            if(!v[i]) continue;
+            if(j < v.size()) v[i]->left = v[j++];
+            if(j < v.size()) v[i]->right = v[j++];
+        }
+        return v[0];
+    }
+};
+
+class Solution {
+public:
+    char* Serialize(TreeNode *root) {    
+        if (!root) return "#";
+     
+        string res = to_string(root->val);
+        res.push_back(',');
+     
+        char* left = Serialize(root->left);
+        char* right = Serialize(root->right);
+        char* ret = new char[strlen(left)+strlen(right)+res.size()];
+        // 如果是string类型，直接用operator += ,这里char* 需要用函数
+        strcpy(ret, res.c_str());
+        strcat(ret, left);
+        strcat(ret, right);
+     
+        return ret;
+    }
+    TreeNode* deseri(char *&s) {
+        if (*s == '#') {
+            ++s;
+            return nullptr;
+        }
+     
+        // 构造根节点值
+        int num = 0;
+        while (*s != ',') {
+            num = num * 10 + (*s - '0');
+            ++s;
+        }
+        ++s;
+        // 递归构造树
+        TreeNode *root = new TreeNode(num);
+        root->left = deseri(s);
+        root->right = deseri(s);
+     
+        return root;
+    }
+    TreeNode* Deserialize(char *str) {
+        return deseri(str);
+    }
+};
+
+#endif
+
+#if 0
+// 二叉搜索树与双向链表
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+
+    Node() {}
+
+    Node(int _val) {
+        val = _val;
+        left = NULL;
+        right = NULL;
+    }
+
+    Node(int _val, Node* _left, Node* _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
+};
+*/
+class Solution {
+public:
+    Node* treeToDoublyList(Node* root) {
+        if(!root) return nullptr;
+        Node* head = nullptr, *pre =nullptr;    // head保存头结点，pre保存中序遍历过程中的上一个节点
+        inOrder(root, head, pre);
+        head->left = pre;
+        pre->right = head;
+        return head;
+    }
+    
+    void inOrder(Node* cur, Node* &head, Node* &pre){
+        if(!cur) return;
+        inOrder(cur->left, head, pre);
+
+        if(!pre) head = cur;    // 说明当前是第一个节点，作为头结点
+        else{
+            cur->left = pre;
+            pre->right = cur;
+        }
+        pre = cur;
+
+        inOrder(cur->right, head, pre);
+    }
+};
+
+#endif
+
+#if 0
+// 复杂链表的复制
+
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(!head) return nullptr;
+        Node* cur = head;
+        unordered_map<Node*, Node*> map;
+        // 复制节点，建立 “原节点 -> 新节点” 的 map 映射
+        while(cur){
+            map[cur] = new Node(cur->val);
+            cur = cur->next;
+        }
+        cur = head;
+        // 构建新链表的 next 和 random 指向
+        while(cur){
+            map[cur]->next = map[cur->next];
+            map[cur]->random = map[cur->random];
+            cur = cur->next;
+        }
+        // 返回新链表的头节点
+        return map[head];
+    }
+};
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(!head) return nullptr;
+        Node* cur = head;
+        // 1.复制各节点，构建拼接链表
+        while(cur){
+            Node* tmp = new Node(cur->val);
+            tmp->next = cur->next;
+            cur->next = tmp;
+            cur = tmp->next;
+        }
+        // 2.构建各新节点的 random 指向
+        cur = head;
+        while(cur){
+            if(cur->random) cur->next->random = cur->random->next;
+            cur = cur->next->next;
+        }
+        // 3.拆分两链表
+        cur = head->next;
+        Node* pre = head, *res = head->next;
+        while(cur->next){
+            pre->next = pre->next->next;
+            cur->next = cur->next->next;
+            pre = pre->next;
+            cur = cur->next;
+        }
+        pre->next = nullptr; // 单独处理原链表尾节点
+        return res;
+    }
+};
+
+#endif
 
 
 
