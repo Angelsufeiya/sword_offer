@@ -6,6 +6,49 @@
 #include <set>
 using namespace std;
 
+#if 0
+
+class Solution {
+public:
+    string minNumber(vector<int>& nums) {
+        if(nums.size() == 1) return to_string(nums[0]);
+
+        vector<string> v;
+        string res;
+        for(auto i : nums) v.push_back(to_string(i));
+        sort(v.begin(), v.end(), strCompare);   // 自定义 strCompare 函数
+        for(auto i : v) res += i;
+        return res;
+    }
+
+    static bool strCompare(const string& s1, const string& s2){ // 注意 static
+        string add1 = s1 + s2;
+        string add2 = s2 + s1;
+        return add1 < add2;
+    }
+};
+
+#endif
+
+class Solution {
+public:
+    string minNumber(vector<int>& nums) {
+        if(nums.size() == 1) return to_string(nums[0]);
+
+        vector<string> v;
+        string res;
+        for(auto i : nums) v.push_back(to_string(i));
+        sort(v.begin(), v.end(), strCompare);   // 自定义 strCompare 函数
+        for(auto i : v) res += i;
+        return res;
+    }
+
+    static bool strCompare(const string& s1, const string& s2){ // 注意 static
+        string add1 = s1 + s2;
+        string add2 = s2 + s1;
+        return add1 < add2;
+    }
+};
 
 #if 0
 // 数字序列中某一位的数字
