@@ -6,6 +6,52 @@
 #include <set>
 using namespace std;
 
+
+
+
+#if 0
+// 把数字翻译成字符串
+class Solution {
+public:
+    int backtrack(string& s, int i){
+        int n = s.size();
+        if(i == n) return 1;
+        if(i == n-1 || s[i] == '0' || s.substr(i, 2) > "25") 
+            return backtrack(s, i+1);
+        return backtrack(s, i+1) + backtrack(s, i+2);
+    }
+    int translateNum(int num) {
+        string s = to_string(num);
+        return backtrack(s, 0);
+    }
+};
+
+class Solution {
+public:
+    int translateNum(int num) {
+        if(num < 10) return 1;
+
+        string s = to_string(num);
+        int len = s.length();
+        vector<int> dp(len + 1);
+        dp[1] = 1; // 显而易见 dp[1] = 1
+        dp[0] = 1; // 比如 num = 12，有两种方法，即 dp[2] = dp[1] + dp[0]，可得 dp[0] = 1
+
+        for(int i = 2; i <= len; ++i) {
+            if(s[i - 2] == '1' || (s[i - 2] == '2' && s[i - 1] <= '5')) {
+                dp[i] = dp[i - 2] + dp[i - 1];
+            }
+            else {
+                dp[i] = dp[i - 1];
+            }
+        }
+
+        return dp[len];
+    }
+};
+
+#endif
+
 #if 0
 
 class Solution {
