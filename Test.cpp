@@ -6,7 +6,107 @@
 #include <set>
 using namespace std;
 
+#if 0
+// 丑数
+class Solution {
+public:
+    bool determine(int num){
+        if(num > 0 && num <= 6) return true;
+        else if(num < 0) return false;
+        
+        while(num % 5 == 0) num /= 5;
+        while(num % 3 == 0) num /= 3;
+        while(num % 2 == 0) num /= 2;
+        return num == 1;
+    }
+    int nthUglyNumber(int n) {
+        int count = 0;
+        int i = 0;
+        while(count != n){
+            if(determine(++i)) ++count;
+        }
+        return i;
+    }
+};
 
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        int p2 = 0, p3 = 0, p5 = 0;
+        vector<int> dp(n);
+        dp[0] = 1;
+        for(int i = 1; i < n; ++i){
+            dp[i] = min(min(dp[p2]*2, dp[p3]*3), dp[p5]*5);
+            if(dp[i] == dp[p2]*2) ++p2;
+            if(dp[i] == dp[p3]*3) ++p3;
+            if(dp[i] == dp[p5]*5) ++p5;
+        }
+        return dp[n-1];
+    }
+};
+
+#endif
+
+#if 0
+// 最长不含重复字符的子字符串
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int left = 0;
+        int n = s.size();
+        int res = 0;
+        vector<int> v(128, -1);
+        for(int i = 0; i < n; ++i){
+            if(v[s[i]] >= left){
+                left = v[s[i]]+1;
+            }
+            v[s[i]] = i;
+            res = max(res, i-left+1);
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        map<char, int> m;
+        int res = 0, l = 0, r = 0;
+        while (r < s.size()) {
+            if (m.find(s[r]) != m.end()) {
+                l = max(l, m[s[r]] + 1);
+            }
+            m[s[r++]] = r;
+            res = max(r - l, res);
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int len = s.length();
+        if(len < 2) return len;
+
+        int res = -1, right = 0;
+        unordered_set<char> store;
+        for(int left = 0; left < len; ++left) {
+            while(right < len && !store.count(s[right])) {
+                store.insert(s[right]);
+                ++right;
+            }
+            res = max(res, right - left);
+            store.erase(s[left]);
+            if(right >= len) break;
+        }
+
+        return res;
+    }
+};
+
+
+#endif
 
 
 #if 0
