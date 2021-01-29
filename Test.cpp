@@ -6,6 +6,212 @@
 #include <set>
 using namespace std;
 
+
+#if 0
+// 数组中的逆序对
+class Solution {
+public:
+    int reversePairs(vector<int>& nums) {
+        int count = 0;
+        for(int i = 0; i < nums.size(); ++i){
+            for(int j = i+1; j < nums.size(); ++j){
+                if(nums[i] > nums[j]) ++ count;
+            }
+        }
+        return count;
+    }
+};
+
+class Solution {
+public:
+    int reversePairs(vector<int>& nums){
+        int sz = nums.size();
+        // 若不存在数对，直接 return 0
+        if (sz < 2) return 0;
+
+        vector<int> tmp(sz);
+        return mergeSort(nums, tmp, 0, sz-1);
+    }
+private:
+    int mergeSort(vector<int>& nums, vector<int>& tmp, int l, int r){
+        if (l >= r) return 0;   // 递归终止条件是只剩一个元素了（即不存在数对了）
+
+        int mid = l + (r - l) / 2;  // 此算式等同于 (l + r) / 2，是为了避免溢出
+        int leftPairs = mergeSort(nums, tmp, l, mid);    // 计算左半部分的逆序对
+        int rightPairs = mergeSort(nums, tmp, mid+1, r); // 计算右半部分的逆序对
+        
+        if(nums[mid] <= nums[mid+1]){
+            // 即如果左右都已排好序，而且左边的最大值 <= 右边的最小值，那么就不存在跨越左边和右边的逆序对了
+            return leftPairs + rightPairs;
+        }
+        int crossPairs = mergeAndCount(nums, tmp, l, mid, r);   // 计算跨越左边和右边的逆序对
+
+        return leftPairs + rightPairs + crossPairs;
+    }
+    
+    // 本函数的前提条件是：左半部分和右半部分都是已经按升序排好序了的
+    int mergeAndCount(vector<int>& nums, vector<int>& tmp, int l, int mid, int r){
+        // 因为本函数是从左右部分都只有一个元素的情况开始运行的（自底向上），所以是可以保证前提条件的
+        for(int i = l; i <= r; ++i){
+            tmp[i] = nums[i];   // 先填充 tmp 辅助数组
+        }
+        int i = l, j = mid+1;   // i 和 j 分别是左半部分和右半部分的起点
+        int count = 0;  // count 用来统计逆序对数量
+
+        for(int k = l; k <= r; ++k){
+            if(i == mid + 1){
+                // 假如 i 已经越过左边的边界，直接填充右半部分进 nums;
+                nums[k] = tmp[j];
+                ++j;
+            }
+            else if(j == r + 1){
+                // 假如 j 已经越过右边的边界，直接填充左半部分进 nums
+                nums[k] = tmp[i];
+                ++i;
+            }
+            else if(tmp[i] <= tmp[j]){
+                // 假如左边小于等于右边，那就不是逆序对，不用修改 count
+                nums[k] = tmp[i];
+                ++i;
+            }
+            else if(tmp[i] > tmp[j]) {
+                // 假如左边大于右边，是逆序对，count += 当前左边 [i, mid] 的所有元素
+                // 因为假如左边是 [7,8]，右边是[5,6]，然后 i 指向 7，j 指向 5
+                // 那么 5 和 7、8 都构成了逆序对，也就是此时有两对新的逆序对
+                // 所以可以总结出规律：count += mid - i + 1
+                nums[k] = nums[j];
+                count += mid - i + 1;
+                ++j;
+            }
+        }
+        return count;
+    }
+};
+
+class BIT {
+private:
+    vector<int> tree;
+    int n;
+
+public:
+    BIT(int _n): n(_n), tree(_n + 1) {}
+
+    static int lowbit(int x) {
+        return x & (-x);
+    }
+
+    int query(int x) {
+        int ret = 0;
+        while (x) {
+            ret += tree[x];
+            x -= lowbit(x);
+        }
+        return ret;
+    }
+
+    void update(int x) {
+        while (x <= n) {
+            ++tree[x];
+            x += lowbit(x);
+        }
+    }
+};
+
+class Solution {
+public:
+    int reversePairs(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> tmp = nums;
+        // 离散化
+        sort(tmp.begin(), tmp.end());
+        for (int& num: nums) {
+            num = lower_bound(tmp.begin(), tmp.end(), num) - tmp.begin() + 1;
+        }
+        // 树状数组统计逆序对
+        BIT bit(n);
+        int ans = 0;
+        for (int i = n - 1; i >= 0; --i) {
+            ans += bit.query(nums[i] - 1);
+            bit.update(nums[i]);
+        }
+        return ans;
+    }
+};
+
+#endif
+
+#if 0
+// 礼物的最大价值
+class Solution {
+public:
+    int maxValue(vector<vector<int>>& grid) {
+        if(grid.size() == 0 || grid[0].size() == 0) return 0;
+
+        int row = grid.size(), col = grid[0].size();
+        vector<vector<int> > dp(row, vector<int>(col, 0));
+
+        for(int i = 0; i < row; ++i) {
+            for(int j = 0; j < col; ++j) {
+                int left = 0, up = 0;
+
+                if(i > 0) up = dp[i - 1][j];
+                if(j > 0) left = dp[i][j - 1];
+
+                dp[i][j] = max(up, left) + grid[i][j]; // 状态转移方程
+            }
+        }   
+        return dp[row - 1][col - 1];
+    }
+};
+
+class Solution {
+public:
+    int maxValue(vector<vector<int>>& grid) {
+        if(grid.size() == 0 || grid[0].size() == 0) return 0;
+
+        int row = grid.size(), col = grid[0].size();
+        for(int i = 0; i < row; ++i) {
+            for(int j = 0; j < col; ++j) {
+                if(i == 0 && j == 0){
+                    continue;
+                }
+                else if(i == 0){
+                    grid[i][j] += grid[i][j-1];
+                }
+                else if(j == 0){
+                    grid[i][j] += grid[i-1][j];
+                }
+                else{
+                    grid[i][j] += max(grid[i-1][j], grid[i][j-1]);
+                }
+            }
+        }   
+        return grid[row - 1][col - 1];
+    }
+};
+
+class Solution {
+public:
+    int maxValue(vector<vector<int>>& grid) {
+        if(grid.size() == 0 || grid[0].size() == 0) return 0;
+
+        int row = grid.size(), col = grid[0].size();
+        for(int i = 1; i < col; ++i) {  // 初始化第一行
+            grid[0][i] += grid[0][i-1];
+        }
+        for(int i = 1; i < row; ++i){   // 初始化第一列
+            grid[i][0] += grid[i-1][0];
+        }
+        for(int i = 1; i < row; ++i) {
+            for(int j = 1; j < col; ++j) {
+                grid[i][j] += max(grid[i-1][j], grid[i][j-1]);
+            }
+        }   
+        return grid[row - 1][col - 1];
+    }
+};
+
+#endif
 #if 0
 // 丑数
 class Solution {
