@@ -6,6 +6,169 @@
 #include <set>
 using namespace std;
 
+#if 0
+// 两个链表的第一个公共节点
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        if(headA == nullptr || headB == nullptr) return nullptr;
+        ListNode* p = headA;
+        ListNode* q = headB;
+        while(p != q)
+        {
+            if(p == nullptr)  p = headB;	// p指向另一个链表头
+            else p = p->next;
+            if(q == nullptr) q = headA;		// q指向另一个链表头
+            else q = q->next;
+           
+        }
+        return p;
+    }
+};
+
+
+
+// 在排序数组中查找数字
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int count = 0;
+
+        for (int i : nums) {
+            if (target == i) {
+                ++count;
+            }
+        }
+
+        return count;
+    }
+};
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        unordered_map<int, int> m;
+        for(int i : nums){
+            m[i]++;
+        }
+        return m[target];
+    }
+};
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        auto l=lower_bound(nums.begin(),nums.end(),target);
+        auto r=upper_bound(nums.begin(),nums.end(),target);
+        return r-l;
+    }
+};
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        if(nums.size() == 0) return 0;
+
+        int count = 0, l = 0, r = nums.size();
+        while(l < r){
+            int mid = l + (r - l) / 2;
+
+            if(nums[mid] >= target) r = mid;
+            else l = mid +1;
+        }
+        
+        for(int i = l; i < nums.size(); ++i){
+            if(nums[i] == target) ++count;
+            else break;
+        }
+        return count;
+    }
+};
+
+
+
+// 0～n-1中缺失的数字
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        if(nums.size() == 0) return -1;
+
+        for(int i = 0; i < nums.size(); ++i){
+            if(i != nums[i]) return i;
+        }
+        return nums.size();
+    }
+};
+
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        if(nums.size() == 0) return -1;
+
+        int l = 0, r = nums.size()-1;
+        while(l <= r){
+            int mid = l + (r - l) / 2;
+            if(nums[mid] == mid) l = mid + 1;
+            else r = mid - 1;
+        }
+        return l;
+    }
+};
+
+
+
+// 二叉搜索树的第k大节点
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int kthLargest(TreeNode* root, int k) {
+        int res = 0;
+        dfs(root, res, k);
+        return res;
+    }
+private:
+    void dfs(TreeNode* root, int& res, int& k){
+        if(root == nullptr) return;
+        dfs(root->right, res, k);
+        if(k == 1) res = root->val;
+        dfs(root->left, res, --k);
+    }
+};
+
+class Solution {
+public:
+    int kthLargest(TreeNode* root, int &k) {
+        stack<TreeNode*> st;
+        while(root || st.size()){
+            while(root){
+                st.push(root);  // 根入栈
+                root = root->right; // 访问右子树，向下探
+            }
+            root = st.top(), st.pop();    // 出栈
+            if(!--k) return root->val;
+            root = root->left;  // 访问左子树
+        }
+        return 0;
+    }
+};
+
+#endif
 
 #if 0
 // 数组中的逆序对
