@@ -6,6 +6,170 @@
 #include <set>
 using namespace std;
 
+
+#if 0
+// 平衡二叉树
+class Solution {
+public:
+    bool isBalanced(TreeNode* root) {
+        if(!root) return true;
+
+        return (abs(maxDepth(root->left) - maxDepth(root->right)) <= 1) && isBalanced(root->left) && isBalanced(root->right);
+    }
+private:
+    int maxDepth(TreeNode* root){
+        if(!root) return 0;
+        return max(maxDepth(root->left), maxDepth(root->right)) + 1;
+    }
+};
+
+class Solution {
+public:
+    bool isBalanced(TreeNode* root) {
+        if(!root) return true;
+        int depth = 0;
+        return isBalanced(root, depth);
+    }
+private:
+    bool isBalanced(TreeNode* root, int& depth){
+        if(root == nullptr){
+            depth = 0;
+            return true;
+        }
+        int l = 0, r = 0;
+        if(isBalanced(root->left, l) && isBalanced(root->right, r)){
+            int dif = abs(l - r);
+            if(dif <= 1){
+                depth = (l > r ? l : r) + 1;
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+#endif
+
+
+#if 0
+// 二叉树的深度
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if(!root) return 0;
+
+        int l = maxDepth(root->left);
+        int r = maxDepth(root->right);
+        
+        return max(l, r) + 1;
+    }
+};
+
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if(!root) return 0;
+
+        queue<TreeNode*> bfs;
+        bfs.push(root);
+        int res = 0;
+
+        while (!bfs.empty()) {
+            // 第一层循环确保当前层还有元素
+            queue<TreeNode*> temp;  // temp 用于储存当前层的下一层的所有元素
+            while (!bfs.empty()) {
+                // 第二层循环则是遍历当前层的所有元素
+                if (bfs.front()->left) {temp.push(bfs.front()->left);}
+                if (bfs.front()->right) {temp.push(bfs.front()->right);}
+                bfs.pop();
+            }
+            ++ res; // 层数 +1
+            bfs = temp; // bfs 更新到当前层的下一层
+        }
+
+        return res;
+    }
+};
+
+#endif
+
+
+#if 0
+// 数组中数字出现的次数
+class Solution {
+public:
+    vector<int> singleNumbers(vector<int>& nums) {
+        int ret = 0, sz = nums.size();
+        for(int n : nums){
+            ret ^= n;
+        }
+        int div = 1;
+        while((div & ret) == 0){
+            div <<= 1;
+        }
+        int a = 0, b = 0;
+        for(int n : nums){
+            if(div & n){
+                a ^= n;
+            }
+            else{
+                b ^= n;
+            }
+        }
+        return vector<int>{a, b};
+    }
+};
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        for(auto i = 0; i < nums.size()-3; i += 3)  //每三个数检查一次
+        {
+            if(nums[i] != nums[i+2])    //很好理解，比如0，0，0，1，3，3，3
+                return nums[i];         //第一次检查，nums[0] == nums[2];i+2，检查下一组
+        }                               //第二次检查，nums[3] != nums[5]，返回nums[3]。
+        return nums.back();
+    }
+};
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        unordered_map<int, int> m;
+        for(int n : nums){
+            m[n]++;
+        }
+        int res = 0;
+        for(auto i : m){
+            if (i.second == 1) {
+                res = i.first;
+                break;
+            }
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int res = 0;
+        for(int i = 0; i < 32; ++i){
+            int cnt = 0;
+            for(int n : nums){
+                // n & 1 << i 的值大于0即为真
+                if(n & (1 << i)) cnt++;
+            }
+            // 构造只出现一次的那个数字，采用异或的方法生成二进制中的每一位
+            if(cnt % 3 == 1) res ^= (1 << i);
+        }
+        return res;
+    }
+};
+
+#endif
+
 #if 0
 // 两个链表的第一个公共节点
 /**
