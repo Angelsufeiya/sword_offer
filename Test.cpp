@@ -7,6 +7,87 @@
 using namespace std;
 
 
+#if 0 
+// 和为s的连续正数序列
+class Solution {
+public:
+    vector<vector<int>> findContinuousSequence(int target) {
+        if (target == 1 || target == 2) return {};
+
+        vector<vector<int>> res;
+        vector<int> v;
+        int sum = 0, limit = target / 2;
+        for(int i = 1; i <= limit; ++i){
+            for(int j = i; ; ++j){
+                v.push_back(j);
+                sum += j;
+                if(sum == target){
+                    res.push_back(v);
+                    v.clear();
+                }
+                else if(sum > target){
+                    sum = 0;
+                    v.clear();
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    vector<vector<int>> findContinuousSequence(int target) {
+        if (target == 1 || target == 2) return {};
+
+        vector<vector<int>> res;
+        vector<int> v;
+        for (int l = 1, r = 2; l < r;){
+            int sum = (l + r) * (r - l + 1) / 2;
+            if (sum == target) {
+                v.clear();
+                for (int i = l; i <= r; ++i) {
+                    v.emplace_back(i);
+                }
+                res.emplace_back(v);
+                l++;
+            } else if (sum < target) {
+                r++;
+            } else {
+                l++;
+            }
+        }
+        return res;
+    }
+};
+
+
+
+// 和为s的两个数字
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        if (nums.size() == 1) {
+            return {};
+        }
+
+        int i = 0, j = nums.size()-1;
+        while(i < j){
+            if(nums[i] + nums[j] == target) {
+                return {nums[i], nums[j]};
+            }
+            else if(nums[i] + nums[j] > target) 
+                --j;
+            else 
+                ++i;
+        }
+        return {};
+    }
+};
+
+#endif
+
 #if 0
 // 平衡二叉树
 class Solution {
