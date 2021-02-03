@@ -6,6 +6,39 @@
 #include <set>
 using namespace std;
 
+
+
+// 队列的最大值
+class MaxQueue {
+    queue<int> q;
+    deque<int> d;
+public:
+    MaxQueue() {}
+    
+    int max_value() {
+        if(d.empty()) return -1;
+        return d.front();
+    }
+    
+    void push_back(int value) {
+        while(!d.empty() && d.back() < value){
+            d.pop_back();
+        }
+        d.push_back(value);
+        q.push(value);
+    }
+    
+    int pop_front() {
+        if(q.empty()) return -1;
+        int res = q.front();
+        if(res == d.front()) d.pop_front();
+        q.pop();
+        return res;
+    }
+};
+
+#endif
+
 #if 0
 // 滑动窗口的最大值
 class Solution {
