@@ -6,6 +6,189 @@
 #include <set>
 using namespace std;
 
+#if 0
+// 滑动窗口的最大值
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        if(nums.size() < k || k <= 0 || nums.empty()) return {};
+
+        vector<int> res;
+        int start = 0, end = k - 1;
+        while(end < nums.size()){
+            int temp = nums[start];
+            for(int i = start+1; i <= end; ++i){
+                temp = max(temp, nums[i]);
+            }
+            res.push_back(temp);
+            ++start;
+            ++end;
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        if(nums.size() < k || k <= 0 || nums.empty()) return {};
+
+        vector<int> res;
+        deque<int> findMax;
+
+        for (int i = 0; i < nums.size(); ++i) {
+            // i 每加一次，代表滑动窗口向右移一个单位。
+            // i 指向的是每个滑动窗口的尾部元素（从 i = k - 1 开始）。
+
+            if (i >= k && !findMax.empty()) {
+                // i >= k 是为了确保 findMax.front() 至少为第一个完整的滑动窗口的最大值索引。
+                // 即至少形成了一个完整的滑动窗口。
+                res.push_back(nums[findMax.front()]);
+            }
+
+            while (!findMax.empty() && nums[i] >= nums[findMax.back()]) {
+                // 如果新进来的 nums[i] 大于等于滑动窗口的尾部元素，
+                // 说明该尾部元素肯定不会是任何滑动窗口的最大元素。
+                // 就想象公司新来了一个既比你年轻又比你能干（大于等于你）的人，那你就只能被淘汰了，
+                // 而且是循环淘汰掉所有不如新员工的老员工。
+                findMax.pop_back();
+            }
+
+            if (!findMax.empty() && i - findMax.front() >= k) {
+                // 虽然 findMax 的头部是最大的元素的索引，但是如果当前滑动窗口已不包括该索引，
+                // 那么需要弹出该索引。
+                // 就想象即使是公司的骨干成员，但是过了35岁也要被淘汰。
+                findMax.pop_front();
+            }
+
+            findMax.push_back(i);
+        }
+
+        res.push_back(nums[findMax.front()]); // 最后一个滑动窗口还没计算就退出了 for 循环，需补上。
+
+        return res;
+    }
+};
+
+#endif
+
+#if 0
+// 左旋转字符串
+
+class Solution {
+public:
+    string reverseLeftWords(string s, int n) {
+        if(n >= s.length() || s.length() < 2 || n == 0) return s;
+        
+        int count = 0;
+        while(count < n){
+            s += s[0];
+            s.erase(0, 1);
+            count++;
+        }
+        return s;
+    }
+};
+
+class Solution {
+public:
+    string reverseLeftWords(string s, int n) {
+        if (n >= s.length() || s.length() < 2 || n == 0) {
+            return s;
+        }
+
+        reverse(s, 0, n - 1);   // 翻转 s1 部分
+        reverse(s, n, s.length() - 1);  // 翻转 s2 部分
+        reverse(s, 0, s.length() - 1);  // 翻转整个字符串 s
+
+        return s;
+    }
+
+    void reverse(string& s, int start, int end) {
+        if (end >= s.length() || end - start < 1) {
+            return;
+        }
+
+        while (start < end) {
+            char temp = s[start];
+            s[start] = s[end];
+            s[end] = temp;
+            start++; end--;
+        }
+    }
+};
+#endif
+
+#if 0
+// 翻转单词顺序
+class Solution {
+public:
+    string reverseWords(string s) {
+        int len = s.length();
+
+        if (len == 0) {
+            return "";
+        }
+
+        int j = len - 1;
+        string res = "";
+
+        while (j >= 0) {
+            if (s[j] == ' ') {
+                // 当 s[j] 是空格时，j 不断左移
+                j--;
+                continue;
+            }
+
+            while (j >= 0 && s[j] != ' ') {
+                // 注意 while 里必须用 && 短路求值，且 j >= 0 要放前面
+                // 不然如果 j 变成 -1，那么计算 s[j] 会发生溢出错误！
+                j--;
+            }
+            
+            int pos = j; // 用 pos 保存 j 当前的位置
+            j++; // j 现在指向的是一个空格，需要右移一位才能指向一个单词的开头
+
+            while (s[j] != ' ' && j < len) {
+                // 向 res 中添加单词
+                res += s[j];
+                j++;
+            }
+
+            j = pos; // j 回到新添加的单词的最左端再往左一个空格处
+            res += ' '; // 单词添加完毕后需要加上一个空格
+        }
+        if(res.length() > 0){
+            res.erase(res.length() - 1, 1);
+        }
+
+        return res;
+    }
+};
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        int k = 0;
+        for (int i = 0; i < s.size(); ++i){
+            while (i < s.size() && s[i] == ' ') {
+                ++i;    // 找到第一个非空格字符
+            }
+            if (i == s.size()) break;
+            int j = i;
+            while (j < s.size() && s[j] != ' ') ++j;    //遍历1个非空单词
+            reverse(s.begin() + i, s.begin() + j);      //反转1个单词
+            if (k) s[k++] = ' ';
+            while (i < j) s[k++] = s[i++];      //反转后的1个单词赋给s[k]
+        }
+        s.erase(s.begin() + k, s.end());   //删除 k后面空格
+        reverse(s.begin(), s.end());
+        return s;
+    }
+};
+
+#endif
+
 
 #if 0 
 // 和为s的连续正数序列
