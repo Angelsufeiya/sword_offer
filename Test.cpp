@@ -6,6 +6,80 @@
 #include <set>
 using namespace std;
 
+// 扑克牌中的顺子
+class Solution {
+public:
+    bool isStraight(vector<int>& nums) {
+        if(nums.size() < 5) return false;
+
+        sort(nums.begin(), nums.end()); 
+        int countZero = 0;  // 0 的个数
+
+        for(int i = 0; i < nums.size(); ++i){
+            if(nums[i] == 0){
+                ++countZero;
+                continue;
+            } 
+
+            int j = i + 1;
+
+            if(j < nums.size()){
+                // 如果相邻两个元素相等，就不是顺子
+                if(nums[i] == nums[j]) return false;
+
+                int tmp = nums[j] - nums[i];
+                while(tmp > 1){
+                    if(countZero == 0) return false;
+
+                    --countZero;    // 相邻两个数的差距用 0 来弥补
+                    --tmp;  // 差距减小 1
+                }
+            }
+        }
+        return true;
+    }
+};
+
+
+
+// n个骰子的点数
+class Solution {
+public:
+    vector<double> dicesProbability(int n) {
+        vector<double> res(n * 6 - n + 1);
+        vector<vector<int>> dp(n + 1, vector<int>(6 * n + 1, 0));   // 将全部值初始化为 0
+
+        int row = dp.size(), col = dp[0].size();
+        for(int n = 1; n <= 6; ++n){
+            dp[1][n] = 1;   // 初始化 dp 数组
+        }
+
+        for (int n = 2; n < row; ++n) {
+            for (int s = n; s < col; ++s) {
+                // 注意 s 从 n 开始，因为 s 的最小值为 n
+                // 比如掷 3 个骰子，s 最小为 3
+                for (int k = 1; k <= 6; ++k) {
+                    if (s - k > 0) {
+                        dp[n][s] += dp[n - 1][s - k];
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+        }
+
+        double deno = pow(6.0, n); // 分母
+
+        for (int s = n; s <= 6 * n; ++s) {
+            // s 的最小值为 n，在 res 里是第 s - n 位
+            res[s - n] = dp[n][s] / deno;
+        }
+
+        return res;
+    }
+};
+
 
 
 // 队列的最大值
